@@ -61,7 +61,7 @@ nav{
  color:var(--uv);
 }
 .hero p{
- max-width:90%;
+ max-width:640px;
  opacity:.7;
  margin:auto;
 }
