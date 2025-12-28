@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vízia</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="galaxy"></div><div class="city"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">LUMIÈRA NOIR</div>
+    <div class="menu">
+      <a href="index.html">Domov</a>
+      <a href="collection.html">Kolekcia</a>
+      <a href="vision.html" class="active">Vízia</a>
+      <a href="about.html">O nás</a>
+      <a href="cart.html">Košík</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+<h2>Vízia & Filozofia</h2>
+<p>Naším cieľom je redefinovať dezert ako luxusný objekt.</p>
+</section>
+
+<section class="section">
+<h2>Kontaktujte nás</h2>
+<form id="contactForm">
+  <input name="firstName" placeholder="Meno">
+  <input name="lastName" placeholder="Priezvisko">
+  <input name="email" placeholder="Email">
+  <input name="phone" placeholder="Telefón">
+  <textarea name="message" placeholder="Správa"></textarea>
+
+  <!-- GDPR -->
+  <label style="display:block;font-size:12px;opacity:0.7;margin-top:10px;">
+    <input type="checkbox" id="gdprContact">
+    Súhlasím so spracovaním osobných údajov za účelom odpovede na správu.
+  </label>
+
+  <button type="submit">Odoslať</button>
+</form>
+<div id="contactMessage" style="opacity:0.7;margin-top:10px;"></div>
+
+<footer>Curated for a select audience · <span id="visits"></span></footer>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

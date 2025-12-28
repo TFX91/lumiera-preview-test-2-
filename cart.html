@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Košík</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="galaxy"></div><div class="city"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">LUMIÈRA NOIR</div>
+    <div class="menu">
+      <a href="index.html">Domov</a>
+      <a href="collection.html">Kolekcia</a>
+      <a href="vision.html">Vízia</a>
+      <a href="about.html">O nás</a>
+      <a href="cart.html" class="active">Košík</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+<h2>Váš výber</h2>
+
+<table id="cartTable" style="width:100%;border-collapse:collapse;">
+  <thead>
+    <tr>
+      <th>Názov</th>
+      <th>Variant</th>
+      <th>Množstvo</th>
+      <th>Cena</th>
+      <th>Odstrániť</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3"><strong>Spolu</strong></td>
+      <td colspan="2" id="cartTotal"></td>
+    </tr>
+  </tfoot>
+</table>
+
+<h3>Concierge objednávka</h3>
+
+<form id="conciergeForm">
+  <input name="firstName" placeholder="Meno">
+  <input name="lastName" placeholder="Priezvisko">
+  <input name="email" placeholder="Email">
+  <input name="phone" placeholder="Telefón">
+  <input name="street" placeholder="Ulica">
+  <input name="city" placeholder="Mesto">
+  <input name="zip" placeholder="PSČ">
+
+  <select name="delivery">
+    <option>Osobný odber</option>
+    <option>Rozvoz BA + TT (+10€)</option>
+  </select>
+
+  <!-- GDPR -->
+  <label style="display:block;font-size:12px;opacity:0.7;margin:12px 0;">
+    <input type="checkbox" id="gdprOrder">
+    Súhlasím so spracovaním osobných údajov za účelom vybavenia objednávky.
+  </label>
+
+  <button type="submit">Odoslať objednávku</button>
+</form>
+
+<div id="conciergeMessage" style="opacity:0.7;margin-top:10px;"></div>
+</section>
+
+<footer>Curated for a select audience · <span id="visits"></span></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
