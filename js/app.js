@@ -1,36 +1,15 @@
-<!-- ==========================
-     VISITOR COUNTER
-     LUMERIA NOIR
-========================== -->
-<span id="visits">–</span>
-
-<script>
+/* ==========================
+   VISITOR COUNTER
+========================== */
 document.addEventListener("DOMContentLoaded", () => {
-  const visitsEl = document.getElementById("visits");
-  const url = "https://api.countapi.xyz/hit/lumeria-noir/visits";
-
-  fetch(url, {
-    method: "GET",
-    cache: "no-store"
-  })
-  .then(res => {
-    if (!res.ok) throw new Error("Network error");
-    return res.json();
-  })
-  .then(data => {
-    if (data && typeof data.value === "number") {
-      visitsEl.textContent = data.value;
-    } else {
-      visitsEl.textContent = "–";
-    }
-  })
-  .catch(err => {
-    console.warn("Counter blocked or unavailable");
-    visitsEl.textContent = "–";
-  });
+  if (!localStorage.getItem("ln_visited")) {
+    let visits = Number(localStorage.getItem("ln_visits") || 0) + 1;
+    localStorage.setItem("ln_visits", visits);
+    localStorage.setItem("ln_visited", "true");
+  }
+  const v = document.getElementById("visits");
+  if (v) v.innerText = localStorage.getItem("ln_visits");
 });
-</script>
-
 
 /* ==========================
    UV EASTER EGG
