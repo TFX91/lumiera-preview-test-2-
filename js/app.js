@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   /* ==========================
      VISITOR COUNTER
-  ========================= */
+  ========================== */
   if (!localStorage.getItem("ln_visited")) {
     let visits = Number(localStorage.getItem("ln_visits") || 0) + 1;
     localStorage.setItem("ln_visits", visits);
@@ -12,32 +12,198 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ==========================
      UV EASTER EGG
-  ========================= */
+  ========================== */
   const logo = document.querySelector(".logo");
   if (logo) {
     logo.addEventListener("click", () => document.body.classList.toggle("uv"));
   }
 
   /* ==========================
-     INIT CART
-  ========================= */
-  renderCart && renderCart();
+     MODAL LOGIC
+  ========================== */
+  let modalData = { imgA: "", imgB: "", name: "", price: 0, desc: "", uv: false };
+
+  window.openModal = function(a,b,name,price,desc){
+    modalData={imgA:a,imgB:b,name,price,desc,uv:false};
+    const img=document.getElementById("modalImg");
+    const descEl=document.getElementById("modalDesc");
+    if(img) img.src=a;
+    if(descEl) descEl.innerText=desc;
+    const modal=document.getElementById("modal");
+    if(modal) modal.style.display="flex";
+  }
+
+  window.closeModal=function(){
+    const modal=document.getElementById("modal");
+    if(modal) modal.style.display="none";
+  }
+
+  window.toggleUV=function(){
+    modalData.uv = !modalData.uv;
+    const img=document.getElementById("modalImg");
+    if(img) img.src = modalData.uv ? modalData.imgB : modalData.imgA;
+  }
 
   /* ==========================
-     Scroll Fade-in
+     CART CORE
   ========================== */
-  const faders = document.querySelectorAll(".fade-in-section");
-  const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
-  const appearOnScroll = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
+  window.getCart = function(){ return JSON.parse(localStorage.getItem("cart") || "[]"); }
+  window.saveCart=function(cart){ localStorage.setItem("cart",JSON.stringify(cart)); }
+
+  window.addToCartFromModal=function(){
+    const variant = document.getElementById("modalVariant")?.value || "Classic";
+    let cart = getCart();
+    const existing = cart.find(i => i.name === modalData.name && i.variant===variant);
+    if(existing){ existing.qty+=1; } else {
+      cart.push({ name:modalData.name, price:modalData.price, variant, qty:1 });
+    }
+    saveCart(cart);
+    closeModal();
+    renderCart && renderCart();
+  }
+
+  /* ==========================
+     CART TABLE RENDER
+  ========================== */
+  window.renderCart=function(){
+    const tbody = document.querySelector("#cartTable tbody");
+    const totalEl = document.getElementById("cartTotal");
+    if(!tbody || !totalEl) return;
+    let cart=getCart();
+    tbody.innerHTML="";
+    let total=0;
+    cart.forEach((item,index)=>{
+      const row=document.createElement("tr");
+      row.innerHTML=`
+        <td>${item.name}</td>
+        <td>
+          <select onchange="updateVariant(${index}, this.value)">
+            <option ${item.variant==="Classic"?"selected":""}>Classic</option>
+            <option ${item.variant==="Limited"?"selected":""}>Limited</option>
+            <option ${item.variant==="Lacto-free"?"selected":""}>Lacto-free</option>
+            <option ${item.variant==="Bezlepkove"?"selected":""}>Bezlepkove</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" min="1" value="${item.qty}" onchange="updateQty(${index}, this.value)">
+        </td>
+        <td>${item.price*item.qty} €</td>
+        <td><a onclick="removeItem(${index})">✕</a></td>
+      `;
+      tbody.appendChild(row);
+      total+=item.price*item.qty;
+    });
+    totalEl.innerText = total+" €";
+  }
+
+  window.updateQty=function(i,val){
+    let cart=getCart();
+    cart[i].qty=Math.max(1,Number(val));
+    saveCart(cart);
+    renderCart();
+  }
+
+  window.updateVariant=function(i,val){
+    let cart=getCart();
+    cart[i].variant=val;
+    saveCart(cart);
+    renderCart();
+  }
+
+  window.removeItem=function(i){
+    let cart=getCart();
+    cart.splice(i,1);
+    saveCart(cart);
+    renderCart();
+  }
+
+  /* ==========================
+     EMAILJS INIT
+  ========================== */
+  if(window.emailjs) emailjs.init("uBmaCJ5QxxC0LOY1W");
+
+  /* ==========================
+     EMAILJS – CART ORDER
+  ========================== */
+  const conciergeForm = document.getElementById("conciergeForm");
+  if(conciergeForm){
+    conciergeForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      const gdprCheckbox = document.getElementById("gdprOrder");
+      if(!gdprCheckbox.checked){
+        document.getElementById("conciergeMessage").innerText="Musíte súhlasiť so spracovaním osobných údajov.";
+        return;
+      }
+      let cart=getCart();
+      if(!cart.length){
+        document.getElementById("conciergeMessage").innerText="Košík je prázdny.";
+        return;
+      }
+      let cartHTML=`<table style="width:100%;border-collapse:collapse;">
+        <thead><tr><th>Produkt</th><th>Variant</th><th>Počet</th><th>Cena (€)</th></tr></thead><tbody>`;
+      let total=0;
+      cart.forEach(item=>{
+        cartHTML+=`<tr><td>${item.name}</td><td>${item.variant}</td><td>${item.qty}</td><td>${item.price*item.qty} €</td></tr>`;
+        total+=item.price*item.qty;
+      });
+      cartHTML+=`</tbody><tfoot><tr><th colspan="3">Celková suma</th><th>${total} €</th></tr></tfoot></table>`;
+      const cartInput=document.createElement("input");
+      cartInput.type="hidden";
+      cartInput.name="cartHTML";
+      cartInput.value=cartHTML;
+      conciergeForm.appendChild(cartInput);
+      emailjs.sendForm("service_skuvlfb","template_17jkem8",conciergeForm)
+      .then(()=>{
+        localStorage.removeItem("cart");
+        document.getElementById("conciergeMessage").innerText="Objednávka bola diskrétne prijatá. Concierge vás bude kontaktovať.";
+        conciergeForm.reset();
+        renderCart();
+      })
+      .catch(err=>{
+        document.getElementById("conciergeMessage").innerText="Chyba pri odosielaní objednávky. Skúste znova.";
+        console.error(err);
+      });
+    });
+  }
+
+  /* ==========================
+     EMAILJS – CONTACT FORM
+  ========================== */
+  const contactForm=document.getElementById("contactForm");
+  if(contactForm){
+    contactForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      const gdprCheckbox = document.getElementById("gdprContact");
+      if(gdprCheckbox && !gdprCheckbox.checked){
+        document.getElementById("contactMessage").innerText="Musíte súhlasiť so spracovaním osobných údajov.";
+        return;
+      }
+      emailjs.sendForm("service_skuvlfb","template_xiqb34i",contactForm)
+      .then(()=>{
+        document.getElementById("contactMessage").innerText="Správa bola prijatá. Ozveme sa diskrétne.";
+        contactForm.reset();
+      })
+      .catch(err=>{
+        document.getElementById("contactMessage").innerText="Chyba pri odosielaní správy. Skúste znova.";
+        console.error(err);
+      });
+    });
+  }
+
+  /* ==========================
+     SCROLL FADE-IN
+  ========================== */
+  const faders=document.querySelectorAll(".fade-in-section");
+  const appearOptions={threshold:0.2, rootMargin:"0px 0px -50px 0px"};
+  const appearOnScroll = new IntersectionObserver((entries, observer)=>{
+    entries.forEach(entry=>{
       if(entry.isIntersecting){
         entry.target.classList.add("visible");
         observer.unobserve(entry.target);
       }
     });
   }, appearOptions);
-
-  faders.forEach(fader => appearOnScroll.observe(fader));
+  faders.forEach(fader=>appearOnScroll.observe(fader));
 
   /* ==========================
      PREMIUM PARTICLE LAYER
@@ -45,41 +211,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.createElement("canvas");
   document.body.appendChild(canvas);
   const ctx = canvas.getContext("2d");
-  let w = canvas.width = window.innerWidth;
-  let h = canvas.height = window.innerHeight;
-  const particles = [];
-
+  let w=canvas.width=window.innerWidth;
+  let h=canvas.height=window.innerHeight;
+  const particles=[];
   for(let i=0;i<50;i++){
     particles.push({
-      x: Math.random()*w,
-      y: Math.random()*h,
-      r: Math.random()*2+1,
-      dx: (Math.random()-0.5)*0.2,
-      dy: (Math.random()-0.5)*0.2,
-      alpha: Math.random()*0.5+0.2
+      x:Math.random()*w,
+      y:Math.random()*h,
+      r:Math.random()*2+1,
+      dx:(Math.random()-0.5)*0.2,
+      dy:(Math.random()-0.5)*0.2,
+      alpha:Math.random()*0.5+0.2
     });
   }
-
-  function animate(){
+  function animateParticles(){
     ctx.clearRect(0,0,w,h);
     particles.forEach(p=>{
-      p.x += p.dx;
-      p.y += p.dy;
-      if(p.x>w) p.x=0;
-      if(p.x<0) p.x=w;
-      if(p.y>h) p.y=0;
-      if(p.y<0) p.y=h;
+      p.x+=p.dx;
+      p.y+=p.dy;
+      if(p.x>w)p.x=0;
+      if(p.x<0)p.x=w;
+      if(p.y>h)p.y=0;
+      if(p.y<0)p.y=h;
       ctx.beginPath();
       ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = `rgba(179,107,255,${p.alpha})`;
+      ctx.fillStyle=`rgba(179,107,255,${p.alpha})`;
       ctx.fill();
     });
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animateParticles);
   }
-  animate();
-
-  window.addEventListener("resize", ()=>{
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
+  animateParticles();
+  window.addEventListener("resize",()=>{
+    w=canvas.width=window.innerWidth;
+    h=canvas.height=window.innerHeight;
   });
 });
