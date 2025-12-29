@@ -2,13 +2,22 @@
    VISITOR COUNTER
 ========================== */
 document.addEventListener("DOMContentLoaded", () => {
-  if (!localStorage.getItem("ln_visited")) {
-    let visits = Number(localStorage.getItem("ln_visits") || 0) + 1;
-    localStorage.setItem("ln_visits", visits);
-    localStorage.setItem("ln_visited", "true");
-  }
   const v = document.getElementById("visits");
-  if (v) v.innerText = localStorage.getItem("ln_visits");
+  if (!v) return;
+
+  fetch("https://api.countapi.xyz/hit/lumeria-noir/visits", {
+    method: "GET",
+    cache: "no-store"
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data && typeof data.value === "number") {
+      v.innerText = data.value;
+    }
+  })
+  .catch(() => {
+    // ticho zlyhá – nič nemení
+  });
 });
 
 /* ==========================
@@ -165,7 +174,6 @@ if (conciergeForm) {
   conciergeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    // GDPR check
     const gdprCheckbox = document.getElementById("gdprOrder");
     if (!gdprCheckbox.checked) {
       document.getElementById("conciergeMessage").innerText =
@@ -180,7 +188,6 @@ if (conciergeForm) {
       return;
     }
 
-    // Vytvoriť HTML tabuľku pre email
     let cartHTML = `<table style="width:100%;border-collapse:collapse;">
       <thead>
         <tr>
@@ -210,15 +217,12 @@ if (conciergeForm) {
       </tfoot>
     </table>`;
 
-    // Pridať hidden inputy pre EmailJS
     const cartInput = document.createElement("input");
     cartInput.type = "hidden";
     cartInput.name = "cartHTML";
     cartInput.value = cartHTML;
-
     conciergeForm.appendChild(cartInput);
 
-    // Odoslať cez EmailJS
     emailjs.sendForm(
       "service_skuvlfb",
       "template_17jkem8",
