@@ -1,3 +1,4 @@
+// JavaScript Document
 /* ==========================
    VISITOR COUNTER
 ========================== */
@@ -37,8 +38,7 @@ let modalData = {
 
 function openModal(a, b, name, price, desc) {
   modalData = { imgA: a, imgB: b, name, price, desc, uv: false };
-  const img = document.getElementById("modalImg");
-  img.src = a;
+  document.getElementById("modalImg").src = a;
   document.getElementById("modalDesc").innerText = desc;
   document.getElementById("modal").style.display = "flex";
 }
@@ -49,8 +49,8 @@ function closeModal() {
 
 function toggleUV() {
   modalData.uv = !modalData.uv;
-  const img = document.getElementById("modalImg");
-  img.src = modalData.uv ? modalData.imgB : modalData.imgA;
+  document.getElementById("modalImg").src =
+    modalData.uv ? modalData.imgB : modalData.imgA;
 }
 
 /* ==========================
@@ -118,7 +118,7 @@ function renderCart() {
           onchange="updateQty(${index}, this.value)">
       </td>
       <td>${item.price * item.qty} €</td>
-      <td><a onclick="removeItem(${index})">✕</a></td>
+      <td><a onclick="removeItem(${index})">?</a></td>
     `;
 
     tbody.appendChild(row);
@@ -166,6 +166,7 @@ if (conciergeForm) {
   conciergeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
+    // GDPR check
     const gdprCheckbox = document.getElementById("gdprOrder");
     if (!gdprCheckbox.checked) {
       document.getElementById("conciergeMessage").innerText =
@@ -180,7 +181,7 @@ if (conciergeForm) {
       return;
     }
 
-    // Vytvorenie HTML tabuľky pre email
+    // Vytvoriť HTML tabuľku pre email
     let cartHTML = `<table style="width:100%;border-collapse:collapse;">
       <thead>
         <tr>
@@ -210,16 +211,15 @@ if (conciergeForm) {
       </tfoot>
     </table>`;
 
-    // Pridanie hidden input pred odoslaním
-    let existingInput = conciergeForm.querySelector('input[name="cartHTML"]');
-    if(existingInput) existingInput.remove();
+    // Pridať hidden inputy pre EmailJS
     const cartInput = document.createElement("input");
     cartInput.type = "hidden";
     cartInput.name = "cartHTML";
     cartInput.value = cartHTML;
+
     conciergeForm.appendChild(cartInput);
 
-    console.log("Odosielam objednávku cez EmailJS...");
+    // Odoslať cez EmailJS
     emailjs.sendForm(
       "service_skuvlfb",
       "template_17jkem8",
@@ -230,11 +230,10 @@ if (conciergeForm) {
         "Objednávka bola diskrétne prijatá. Concierge vás bude kontaktovať.";
       conciergeForm.reset();
       renderCart();
-      console.log("Objednávka úspešne odoslaná!");
     }).catch(err => {
-      console.error("EmailJS error (conciergeForm):", err);
       document.getElementById("conciergeMessage").innerText =
         "Chyba pri odosielaní objednávky. Skúste znova.";
+      console.error(err);
     });
   });
 }
@@ -254,7 +253,6 @@ if (contactForm) {
       return;
     }
 
-    console.log("Odosielam kontaktný formulár cez EmailJS...");
     emailjs.sendForm(
       "service_skuvlfb",
       "template_xiqb34i",
@@ -263,11 +261,10 @@ if (contactForm) {
       document.getElementById("contactMessage").innerText =
         "Správa bola prijatá. Ozveme sa diskrétne.";
       contactForm.reset();
-      console.log("Kontaktný formulár úspešne odoslaný!");
     }).catch(err => {
-      console.error("EmailJS error (contactForm):", err);
       document.getElementById("contactMessage").innerText =
         "Chyba pri odosielaní správy. Skúste znova.";
+      console.error(err);
     });
   });
 }
