@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
   /* ==========================
      VISITOR COUNTER
   ========================== */
@@ -7,8 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("ln_visits", visits);
     localStorage.setItem("ln_visited", "true");
   }
-  const v = document.getElementById("visits");
-  if (v) v.innerText = localStorage.getItem("ln_visits");
+  const visitsEl = document.getElementById("visits");
+  if (visitsEl) visitsEl.innerText = localStorage.getItem("ln_visits");
 
   /* ==========================
      UV EASTER EGG
@@ -24,38 +25,38 @@ document.addEventListener("DOMContentLoaded", () => {
   let modalData = { imgA: "", imgB: "", name: "", price: 0, desc: "", uv: false };
 
   window.openModal = function(a,b,name,price,desc){
-    modalData={imgA:a,imgB:b,name,price,desc,uv:false};
-    const img=document.getElementById("modalImg");
-    const descEl=document.getElementById("modalDesc");
-    if(img) img.src=a;
-    if(descEl) descEl.innerText=desc;
-    const modal=document.getElementById("modal");
-    if(modal) modal.style.display="flex";
+    modalData = { imgA:a, imgB:b, name, price, desc, uv:false };
+    const img = document.getElementById("modalImg");
+    const descEl = document.getElementById("modalDesc");
+    if(img) img.src = a;
+    if(descEl) descEl.innerText = desc;
+    const modal = document.getElementById("modal");
+    if(modal) modal.style.display = "flex";
   }
 
-  window.closeModal=function(){
-    const modal=document.getElementById("modal");
-    if(modal) modal.style.display="none";
+  window.closeModal = function(){
+    const modal = document.getElementById("modal");
+    if(modal) modal.style.display = "none";
   }
 
-  window.toggleUV=function(){
+  window.toggleUV = function(){
     modalData.uv = !modalData.uv;
-    const img=document.getElementById("modalImg");
+    const img = document.getElementById("modalImg");
     if(img) img.src = modalData.uv ? modalData.imgB : modalData.imgA;
   }
 
   /* ==========================
      CART CORE
   ========================== */
-  window.getCart = function(){ return JSON.parse(localStorage.getItem("cart") || "[]"); }
-  window.saveCart=function(cart){ localStorage.setItem("cart",JSON.stringify(cart)); }
+  window.getCart = () => JSON.parse(localStorage.getItem("cart") || "[]");
+  window.saveCart = (cart) => localStorage.setItem("cart", JSON.stringify(cart));
 
-  window.addToCartFromModal=function(){
+  window.addToCartFromModal = function(){
     const variant = document.getElementById("modalVariant")?.value || "Classic";
     let cart = getCart();
     const existing = cart.find(i => i.name === modalData.name && i.variant===variant);
-    if(existing){ existing.qty+=1; } else {
-      cart.push({ name:modalData.name, price:modalData.price, variant, qty:1 });
+    if(existing){ existing.qty += 1; } else {
+      cart.push({ name: modalData.name, price: modalData.price, variant, qty:1 });
     }
     saveCart(cart);
     closeModal();
@@ -65,16 +66,17 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ==========================
      CART TABLE RENDER
   ========================== */
-  window.renderCart=function(){
+  window.renderCart = function(){
     const tbody = document.querySelector("#cartTable tbody");
     const totalEl = document.getElementById("cartTotal");
     if(!tbody || !totalEl) return;
-    let cart=getCart();
-    tbody.innerHTML="";
-    let total=0;
-    cart.forEach((item,index)=>{
-      const row=document.createElement("tr");
-      row.innerHTML=`
+    let cart = getCart();
+    tbody.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
         <td>${item.name}</td>
         <td>
           <select onchange="updateVariant(${index}, this.value)">
@@ -91,27 +93,27 @@ document.addEventListener("DOMContentLoaded", () => {
         <td><a onclick="removeItem(${index})">✕</a></td>
       `;
       tbody.appendChild(row);
-      total+=item.price*item.qty;
+      total += item.price*item.qty;
     });
     totalEl.innerText = total+" €";
   }
 
-  window.updateQty=function(i,val){
-    let cart=getCart();
-    cart[i].qty=Math.max(1,Number(val));
+  window.updateQty = function(i,val){
+    let cart = getCart();
+    cart[i].qty = Math.max(1, Number(val));
     saveCart(cart);
     renderCart();
   }
 
-  window.updateVariant=function(i,val){
-    let cart=getCart();
-    cart[i].variant=val;
+  window.updateVariant = function(i,val){
+    let cart = getCart();
+    cart[i].variant = val;
     saveCart(cart);
     renderCart();
   }
 
-  window.removeItem=function(i){
-    let cart=getCart();
+  window.removeItem = function(i){
+    let cart = getCart();
     cart.splice(i,1);
     saveCart(cart);
     renderCart();
@@ -127,16 +129,16 @@ document.addEventListener("DOMContentLoaded", () => {
   ========================== */
   const conciergeForm = document.getElementById("conciergeForm");
   if(conciergeForm){
-    conciergeForm.addEventListener("submit", function(e){
+    conciergeForm.addEventListener("submit", e=>{
       e.preventDefault();
       const gdprCheckbox = document.getElementById("gdprOrder");
       if(!gdprCheckbox.checked){
-        document.getElementById("conciergeMessage").innerText="Musíte súhlasiť so spracovaním osobných údajov.";
+        document.getElementById("conciergeMessage").innerText = "Musíte súhlasiť so spracovaním osobných údajov.";
         return;
       }
-      let cart=getCart();
+      let cart = getCart();
       if(!cart.length){
-        document.getElementById("conciergeMessage").innerText="Košík je prázdny.";
+        document.getElementById("conciergeMessage").innerText = "Košík je prázdny.";
         return;
       }
       let cartHTML=`<table style="width:100%;border-collapse:collapse;">
@@ -147,54 +149,54 @@ document.addEventListener("DOMContentLoaded", () => {
         total+=item.price*item.qty;
       });
       cartHTML+=`</tbody><tfoot><tr><th colspan="3">Celková suma</th><th>${total} €</th></tr></tfoot></table>`;
-      const cartInput=document.createElement("input");
-      cartInput.type="hidden";
-      cartInput.name="cartHTML";
-      cartInput.value=cartHTML;
+      const cartInput = document.createElement("input");
+      cartInput.type = "hidden";
+      cartInput.name = "cartHTML";
+      cartInput.value = cartHTML;
       conciergeForm.appendChild(cartInput);
-      emailjs.sendForm("service_skuvlfb","template_17jkem8",conciergeForm)
-      .then(()=>{
-        localStorage.removeItem("cart");
-        document.getElementById("conciergeMessage").innerText="Objednávka bola diskrétne prijatá. Concierge vás bude kontaktovať.";
-        conciergeForm.reset();
-        renderCart();
-      })
-      .catch(err=>{
-        document.getElementById("conciergeMessage").innerText="Chyba pri odosielaní objednávky. Skúste znova.";
-        console.error(err);
-      });
+      emailjs.sendForm("service_skuvlfb","template_17jkem8", conciergeForm)
+        .then(()=>{
+          localStorage.removeItem("cart");
+          document.getElementById("conciergeMessage").innerText="Objednávka bola diskrétne prijatá. Concierge vás bude kontaktovať.";
+          conciergeForm.reset();
+          renderCart();
+        })
+        .catch(err=>{
+          document.getElementById("conciergeMessage").innerText="Chyba pri odosielaní objednávky. Skúste znova.";
+          console.error(err);
+        });
     });
   }
 
   /* ==========================
      EMAILJS – CONTACT FORM
   ========================== */
-  const contactForm=document.getElementById("contactForm");
+  const contactForm = document.getElementById("contactForm");
   if(contactForm){
-    contactForm.addEventListener("submit", function(e){
+    contactForm.addEventListener("submit", e=>{
       e.preventDefault();
       const gdprCheckbox = document.getElementById("gdprContact");
       if(gdprCheckbox && !gdprCheckbox.checked){
-        document.getElementById("contactMessage").innerText="Musíte súhlasiť so spracovaním osobných údajov.";
+        document.getElementById("contactMessage").innerText = "Musíte súhlasiť so spracovaním osobných údajov.";
         return;
       }
-      emailjs.sendForm("service_skuvlfb","template_xiqb34i",contactForm)
-      .then(()=>{
-        document.getElementById("contactMessage").innerText="Správa bola prijatá. Ozveme sa diskrétne.";
-        contactForm.reset();
-      })
-      .catch(err=>{
-        document.getElementById("contactMessage").innerText="Chyba pri odosielaní správy. Skúste znova.";
-        console.error(err);
-      });
+      emailjs.sendForm("service_skuvlfb","template_xiqb34i", contactForm)
+        .then(()=>{
+          document.getElementById("contactMessage").innerText="Správa bola prijatá. Ozveme sa diskrétne.";
+          contactForm.reset();
+        })
+        .catch(err=>{
+          document.getElementById("contactMessage").innerText="Chyba pri odosielaní správy. Skúste znova.";
+          console.error(err);
+        });
     });
   }
 
   /* ==========================
-     SCROLL FADE-IN
+     SCROLL FADE-IN + MICRO ANIMATIONS
   ========================== */
-  const faders=document.querySelectorAll(".fade-in-section");
-  const appearOptions={threshold:0.2, rootMargin:"0px 0px -50px 0px"};
+  const fadeSections = document.querySelectorAll(".fade-in-section");
+  const appearOptions = {threshold:0.2, rootMargin:"0px 0px -50px 0px"};
   const appearOnScroll = new IntersectionObserver((entries, observer)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
@@ -203,46 +205,53 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }, appearOptions);
-  faders.forEach(fader=>appearOnScroll.observe(fader));
+  fadeSections.forEach(sec=>appearOnScroll.observe(sec));
 
   /* ==========================
      PREMIUM PARTICLE LAYER
   ========================== */
   const canvas = document.createElement("canvas");
+  canvas.style.position="fixed";
+  canvas.style.top=0;
+  canvas.style.left=0;
+  canvas.style.zIndex=-1;
+  canvas.style.pointerEvents="none";
   document.body.appendChild(canvas);
   const ctx = canvas.getContext("2d");
   let w=canvas.width=window.innerWidth;
   let h=canvas.height=window.innerHeight;
+
   const particles=[];
-  for(let i=0;i<50;i++){
+  for(let i=0;i<60;i++){
     particles.push({
       x:Math.random()*w,
       y:Math.random()*h,
-      r:Math.random()*2+1,
-      dx:(Math.random()-0.5)*0.2,
-      dy:(Math.random()-0.5)*0.2,
-      alpha:Math.random()*0.5+0.2
+      r:Math.random()*2+0.5,
+      dx:(Math.random()-0.5)*0.3,
+      dy:(Math.random()-0.5)*0.3,
+      alpha:Math.random()*0.4+0.2
     });
   }
-  function animateParticles(){
+
+  function drawParticles(){
     ctx.clearRect(0,0,w,h);
     particles.forEach(p=>{
       p.x+=p.dx;
       p.y+=p.dy;
-      if(p.x>w)p.x=0;
-      if(p.x<0)p.x=w;
-      if(p.y>h)p.y=0;
-      if(p.y<0)p.y=h;
+      if(p.x>w)p.x=0; if(p.x<0)p.x=w;
+      if(p.y>h)p.y=0; if(p.y<0)p.y=h;
       ctx.beginPath();
       ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
       ctx.fillStyle=`rgba(179,107,255,${p.alpha})`;
       ctx.fill();
     });
-    requestAnimationFrame(animateParticles);
+    requestAnimationFrame(drawParticles);
   }
-  animateParticles();
-  window.addEventListener("resize",()=>{
+  drawParticles();
+
+  window.addEventListener("resize", ()=>{
     w=canvas.width=window.innerWidth;
     h=canvas.height=window.innerHeight;
   });
+
 });
