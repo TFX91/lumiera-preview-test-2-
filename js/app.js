@@ -9,24 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   const v = document.getElementById("visits");
   if (v) v.innerText = localStorage.getItem("ln_visits");
-
-  initLogoUV();
-  renderCart && renderCart();
-  initFadeInSections();
 });
 
 /* ==========================
-   UV LOGO EASTER EGG
+   UV EASTER EGG
 ========================== */
-function initLogoUV() {
+document.addEventListener("DOMContentLoaded", () => {
   const logo = document.querySelector(".logo");
-  if(logo){
-    logo.addEventListener("click", ()=>{
+  if (logo) {
+    logo.addEventListener("click", () => {
       document.body.classList.toggle("uv");
-      showToast(document.body.classList.contains("uv") ? "UV režim aktivovaný" : "UV režim vypnutý");
     });
   }
-}
+});
 
 /* ==========================
    MODAL LOGIC
@@ -42,26 +37,23 @@ let modalData = {
 
 function openModal(a, b, name, price, desc) {
   modalData = { imgA: a, imgB: b, name, price, desc, uv: false };
-  const modalEl = document.getElementById("modal");
-  const modalImg = document.getElementById("modalImg");
+  const modal = document.getElementById("modal");
+  if (!modal) return;
   document.getElementById("modalImg").src = a;
   document.getElementById("modalDesc").innerText = desc;
-  modalEl.style.display = "flex";
-  modalEl.classList.add("show");
+  modal.style.display = "flex";
 }
 
 function closeModal() {
-  const modalEl = document.getElementById("modal");
-  modalEl.classList.remove("show");
-  setTimeout(()=> { modalEl.style.display = "none"; }, 300);
+  const modal = document.getElementById("modal");
+  if (!modal) return;
+  modal.style.display = "none";
 }
 
 function toggleUV() {
   modalData.uv = !modalData.uv;
-  const modalImg = document.getElementById("modalImg");
-  modalImg.src = modalData.uv ? modalData.imgB : modalData.imgA;
-  modalImg.style.transform = "scale(0.97)";
-  setTimeout(()=> modalImg.style.transform="scale(1)", 150);
+  document.getElementById("modalImg").src =
+    modalData.uv ? modalData.imgB : modalData.imgA;
 }
 
 /* ==========================
@@ -75,7 +67,6 @@ function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-/* Add to cart with animation + toast */
 function addToCartFromModal() {
   const variant = document.getElementById("modalVariant").value;
   let cart = getCart();
@@ -98,7 +89,6 @@ function addToCartFromModal() {
   saveCart(cart);
   closeModal();
   renderCart && renderCart();
-  showToast("Produkt pridaný do košíka");
 }
 
 /* ==========================
@@ -141,7 +131,6 @@ function renderCart() {
   totalEl.innerText = total + " €";
 }
 
-/* Update cart helpers */
 function updateQty(i, val) {
   let cart = getCart();
   cart[i].qty = Math.max(1, Number(val));
@@ -227,6 +216,7 @@ if (conciergeForm) {
     cartInput.type = "hidden";
     cartInput.name = "cartHTML";
     cartInput.value = cartHTML;
+
     conciergeForm.appendChild(cartInput);
 
     emailjs.sendForm(
@@ -239,7 +229,6 @@ if (conciergeForm) {
         "Objednávka bola diskrétne prijatá. Concierge vás bude kontaktovať.";
       conciergeForm.reset();
       renderCart();
-      showToast("Objednávka odoslaná!");
     }).catch(err => {
       document.getElementById("conciergeMessage").innerText =
         "Chyba pri odosielaní objednávky. Skúste znova.";
@@ -271,7 +260,6 @@ if (contactForm) {
       document.getElementById("contactMessage").innerText =
         "Správa bola prijatá. Ozveme sa diskrétne.";
       contactForm.reset();
-      showToast("Správa odoslaná!");
     }).catch(err => {
       document.getElementById("contactMessage").innerText =
         "Chyba pri odosielaní správy. Skúste znova.";
@@ -281,33 +269,93 @@ if (contactForm) {
 }
 
 /* ==========================
-   FADE-IN SECTIONS ON SCROLL
+   INIT CART ON LOAD
 ========================== */
-function initFadeInSections() {
-  const fadeSections = document.querySelectorAll(".section");
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) entry.target.classList.add("visible");
+document.addEventListener("DOMContentLoaded", () => {
+  renderCart && renderCart();
+});
+
+/* ==========================
+   Premium Particle + Micro-animation Layer
+========================== */
+document.addEventListener("DOMContentLoaded", () => {
+  initParticles();
+});
+
+function initParticles() {
+  const hero = document.querySelector(".hero");
+  const productGrid = document.querySelector(".grid");
+
+  [hero, productGrid].forEach(container => {
+    if (!container) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.style.position = "absolute";
+    canvas.style.top = 0;
+    canvas.style.left = 0;
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.style.pointerEvents = "none";
+    canvas.style.zIndex = 1;
+    container.style.position = "relative";
+    container.appendChild(canvas);
+
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function resize() {
+      canvas.width = container.offsetWidth;
+      canvas.height = container.offsetHeight;
+      particles = [];
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 2 + 1,
+          dx: (Math.random() - 0.5) * 0.5,
+          dy: (Math.random() - 0.5) * 0.5,
+          alpha: Math.random() * 0.5 + 0.2
+        });
+      }
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.dx;
+        p.y += p.dy;
+
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(179,107,255,${p.alpha})`;
+        ctx.fill();
       });
-    },
-    { threshold: 0.1 }
-  );
-  fadeSections.forEach(section => section.classList.add("fade-in-section"));
-  fadeSections.forEach(section => observer.observe(section));
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  });
 }
 
 /* ==========================
-   TOAST NOTIFICATIONS
+   Fade-in sections on scroll
 ========================== */
-function showToast(message) {
-  let toast = document.createElement("div");
-  toast.className = "toast";
-  toast.innerText = message;
-  document.body.appendChild(toast);
-  setTimeout(()=> toast.classList.add("show"), 50);
-  setTimeout(() => {
-    toast.classList.remove("show");
-    setTimeout(()=> document.body.removeChild(toast), 400);
-  }, 2000);
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const faders = document.querySelectorAll(".fade-in-section");
+  const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+  const appearOnScroll = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target);
+    });
+  }, appearOptions);
+
+  faders.forEach(fader => appearOnScroll.observe(fader));
+});
