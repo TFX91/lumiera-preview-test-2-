@@ -91,7 +91,7 @@ nav{
 
 .hero p{
   max-width:640px;
-  opacity:.7;
+  opacity:.8;
   margin:auto;
   color: var(--gold);
   z-index:2;
@@ -259,9 +259,6 @@ table th, table td{
   text-align:center;
 }
 
-/* ==========================
-   Fade-in sections
-========================== */
 .fade-in-section{
   opacity:0;
   transform:translateY(20px);
@@ -273,9 +270,6 @@ table th, table td{
   transform:translateY(0);
 }
 
-/* ==========================
-   Premium Particle Layer Styling
-========================== */
 canvas{
   display:block;
   position:absolute;
@@ -287,9 +281,6 @@ canvas{
   z-index:1;
 }
 
-/* ==========================
-   Hero Micro Animations
-========================== */
 .hero h1 span{
   display:inline-block;
   animation:float 3s ease-in-out infinite;
