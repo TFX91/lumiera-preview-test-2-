@@ -1,171 +1,216 @@
-:root{
- --bg:#05000a;
- --gold:#c9b46d;
- --uv:#b36bff;
- --text:#f2f2f2;
- --glass:rgba(255,255,255,.04);
+/* ==========================
+   Luxury + Interactivity Upgrade
+========================== */
+
+/* --------------------------
+   Universal smooth transition
+-------------------------- */
+* {
+  transition: all 0.3s ease-in-out;
 }
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:'Inter',sans-serif;
- color:var(--text);
- background:linear-gradient(to bottom,#1b0033,#05000a);
- overflow-x:hidden;
- transition:background .6s;
+
+/* --------------------------
+   Glassmorphism for modals and products
+-------------------------- */
+.product, .modal-box {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,180,109,0.15);
+  backdrop-filter: blur(14px);
+  border-radius: 26px;
+  padding: 30px;
 }
-body.uv{
- background:#020004;
+
+/* --------------------------
+   Hero section micro-interactions
+-------------------------- */
+.hero h1 {
+  text-shadow: 0 0 8px var(--uv), 0 0 16px var(--uv);
+  animation: hero-glow 3s infinite alternate;
 }
-h1,h2,h3{
- font-family:'Playfair Display',serif;
- letter-spacing:.35em;
+@keyframes hero-glow {
+  0% { text-shadow: 0 0 8px var(--uv), 0 0 16px var(--uv); }
+  50% { text-shadow: 0 0 14px var(--uv), 0 0 28px var(--uv); }
+  100% { text-shadow: 0 0 8px var(--uv), 0 0 16px var(--uv); }
 }
-a{text-decoration:none;color:var(--gold)}
-nav{
- position:fixed;top:0;width:100%;z-index:100;
- backdrop-filter:blur(14px);
- background:rgba(0,0,0,.45);
- border-bottom:1px solid rgba(201,180,109,.3);
+
+/* --------------------------
+   Product hover effects
+-------------------------- */
+.product:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 0 28px rgba(179,107,255,0.25);
 }
-.nav-inner{
- display:flex;justify-content:space-between;align-items:center;
- padding:20px 8%;
+
+/* Product images UV glow */
+.product img {
+  transition: transform 0.4s ease, filter 0.5s ease;
 }
-.logo{
- color:var(--gold);
- letter-spacing:.4em;
- cursor:pointer;
+body.uv .product img {
+  filter: hue-rotate(280deg) saturate(1.2);
 }
-.menu a{
- margin-left:18px;
- font-size:.8rem;
- letter-spacing:2px;
- position:relative;
+
+/* --------------------------
+   Buttons upgrade
+-------------------------- */
+button {
+  background:none;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:12px 36px;
+  border-radius:40px;
+  cursor:pointer;
+  letter-spacing:2px;
+  font-weight:600;
+  box-shadow: 0 0 6px rgba(201,180,109,0.2);
 }
-.menu a.active,
-.menu a:hover{
- color:var(--uv);
- text-shadow:0 0 12px var(--uv);
+button:hover {
+  background: linear-gradient(45deg, var(--gold), var(--uv));
+  color: #000;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 14px rgba(179,107,255,0.3);
 }
-.hero{
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- text-align:center;
- padding:0 10%;
+
+/* --------------------------
+   Links hover
+-------------------------- */
+.menu a:hover, .menu a.active {
+  color: var(--uv);
+  text-shadow: 0 0 12px var(--uv);
+  position: relative;
 }
-.hero h1{
- font-size:clamp(3rem,8vw,6rem);
- color:var(--uv);
+.menu a:hover::after {
+  content:"";
+  position:absolute;
+  bottom:-4px;
+  left:0;
+  width:100%;
+  height:2px;
+  background:var(--uv);
+  border-radius:1px;
 }
-.hero p{
- max-width:640px;
- opacity:.7;
- margin:auto;
- color: #c9b46d;
+
+/* --------------------------
+   Modal animations
+-------------------------- */
+.modal {
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,0.94);
+  z-index:200;
+  animation: fade 0.6s;
 }
-.section{
- padding:140px 10%;
+.modal.show .modal-box {
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 0.4s ease, opacity 0.4s ease;
 }
-.galaxy{
- position:fixed;inset:0;
- background:url('https://raw.githubusercontent.com/JulianLaval/canvas-particle-network/master/img/demo-bg.jpg') center/cover;
- opacity:.14;z-index:-2;
+.modal-box {
+  max-width: 760px;
+  padding: 40px;
+  text-align:center;
+  transform: scale(0.95);
+  opacity:0;
 }
-.city{
- position:fixed;bottom:0;width:100%;height:220px;
- background:url('https://i.ibb.co/ZYW3VTp/cityscape.png') bottom center/cover;
- opacity:.12;z-index:-1;
+
+/* --------------------------
+   Fade-in sections on scroll
+-------------------------- */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-.grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
- gap:48px;
+.fade-in-section.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
-.product{
- background:var(--glass);
- border:1px solid rgba(201,180,109,.2);
- border-radius:26px;
- padding:30px;
- text-align:center;
- cursor:pointer;
- transition:.4s;
+
+/* --------------------------
+   Toast notifications
+-------------------------- */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255,215,0,0.95);
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 999;
 }
-.product:hover{
- box-shadow:0 0 28px var(--uv);
- transform:translateY(-6px);
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
 }
-.product img{
- width:100%;
- border-radius:18px;
+
+/* --------------------------
+   Input & Select focus effects
+-------------------------- */
+input:focus, select:focus, textarea:focus {
+  border-color: var(--uv);
+  box-shadow: 0 0 8px rgba(179,107,255,0.3);
+  outline: none;
 }
-.modal{
- position:fixed;inset:0;
- background:rgba(0,0,0,.94);
- display:none;
- align-items:center;
- justify-content:center;
- z-index:200;
- animation:fade .6s;
+
+/* --------------------------
+   UV mode subtle body glow
+-------------------------- */
+body.uv {
+  background: linear-gradient(160deg, #020004, #15001a);
 }
+
+/* --------------------------
+   Cart table micro-adjustments
+-------------------------- */
+#cartTable th, #cartTable td {
+  border-bottom: 1px solid rgba(201,180,109,0.2);
+  padding: 12px;
+}
+#cartTable tbody tr:hover {
+  background: rgba(179,107,255,0.05);
+  transition: background 0.3s;
+}
+
+/* --------------------------
+   Responsive tweaks
+-------------------------- */
+@media(max-width:768px){
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  #cartTable {
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+  .modal-box {
+    width:90%;
+    padding: 24px;
+  }
+}
+
+/* --------------------------
+   Hero & product subtle shine
+-------------------------- */
+.hero p, .product h3, .product p {
+  transition: color 0.4s, text-shadow 0.4s;
+}
+body.uv .hero p,
+body.uv .product h3,
+body.uv .product p {
+  color: #b36bff;
+  text-shadow: 0 0 6px var(--uv);
+}
+
+/* --------------------------
+   Keyframes
+-------------------------- */
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.modal-box{
- max-width:760px;
- padding:40px;
- text-align:center;
-}
-.modal-box img{
- width:100%;
- border-radius:22px;
-}
-.close{
- position:absolute;
- top:30px;right:40px;
- font-size:26px;
- color:var(--gold);
- cursor:pointer;
-}
-button{
- margin-top:18px;
- background:none;
- border:1px solid var(--gold);
- color:var(--gold);
- padding:12px 36px;
- border-radius:40px;
- cursor:pointer;
- letter-spacing:2px;
-}
-button:hover{
- background:var(--gold);
- color:#000;
-}
-.cart-item{
- display:flex;
- justify-content:space-between;
- margin-bottom:12px;
-}
-input,select,textarea{
- width:100%;
- background:transparent;
- border:1px solid rgba(201,180,109,.4);
- color:var(--text);
- padding:12px;
- margin-bottom:12px;
-}
-footer{
- text-align:center;
- padding:50px 0;
- font-size:.7rem;
- opacity:.6;
-}
-table{
- width:100%;
- border-collapse: collapse;
- margin-bottom:20px;
-}
-table th, table td{
- border-bottom:1px solid rgba(201,180,109,.2);
- padding:12px;
-}
