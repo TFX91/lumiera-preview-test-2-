@@ -180,6 +180,7 @@ if (conciergeForm) {
       return;
     }
 
+    // Vytvorenie HTML tabuľky pre email
     let cartHTML = `<table style="width:100%;border-collapse:collapse;">
       <thead>
         <tr>
@@ -209,13 +210,16 @@ if (conciergeForm) {
       </tfoot>
     </table>`;
 
+    // Pridanie hidden input pred odoslaním
+    let existingInput = conciergeForm.querySelector('input[name="cartHTML"]');
+    if(existingInput) existingInput.remove();
     const cartInput = document.createElement("input");
     cartInput.type = "hidden";
     cartInput.name = "cartHTML";
     cartInput.value = cartHTML;
     conciergeForm.appendChild(cartInput);
 
-    console.log("Odosielam objednávku...");
+    console.log("Odosielam objednávku cez EmailJS...");
     emailjs.sendForm(
       "service_skuvlfb",
       "template_17jkem8",
@@ -228,9 +232,9 @@ if (conciergeForm) {
       renderCart();
       console.log("Objednávka úspešne odoslaná!");
     }).catch(err => {
+      console.error("EmailJS error (conciergeForm):", err);
       document.getElementById("conciergeMessage").innerText =
         "Chyba pri odosielaní objednávky. Skúste znova.";
-      console.error("Chyba pri odosielaní objednávky:", err);
     });
   });
 }
@@ -250,7 +254,7 @@ if (contactForm) {
       return;
     }
 
-    console.log("Odosielam kontaktný formulár...");
+    console.log("Odosielam kontaktný formulár cez EmailJS...");
     emailjs.sendForm(
       "service_skuvlfb",
       "template_xiqb34i",
@@ -261,9 +265,9 @@ if (contactForm) {
       contactForm.reset();
       console.log("Kontaktný formulár úspešne odoslaný!");
     }).catch(err => {
+      console.error("EmailJS error (contactForm):", err);
       document.getElementById("contactMessage").innerText =
         "Chyba pri odosielaní správy. Skúste znova.";
-      console.error("Chyba pri odosielaní kontaktného formulára:", err);
     });
   });
 }
