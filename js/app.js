@@ -2,27 +2,32 @@
      VISITOR COUNTER
      LUMERIA NOIR
 ========================== -->
-<span id="visits">0</span>
+<span id="visits">–</span>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const counterKey = "lumeria-noir/visits";
+  const visitsEl = document.getElementById("visits");
+  const url = "https://api.countapi.xyz/hit/lumeria-noir/visits";
 
-  fetch(`https://api.countapi.xyz/hit/${counterKey}`)
-    .then(response => response.json())
-    .then(data => {
-      const visitsEl = document.getElementById("visits");
-      if (visitsEl) {
-        visitsEl.innerText = data.value;
-      }
-    })
-    .catch(error => {
-      console.error("Visitor counter error:", error);
-      const visitsEl = document.getElementById("visits");
-      if (visitsEl) {
-        visitsEl.innerText = "–";
-      }
-    });
+  fetch(url, {
+    method: "GET",
+    cache: "no-store"
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Network error");
+    return res.json();
+  })
+  .then(data => {
+    if (data && typeof data.value === "number") {
+      visitsEl.textContent = data.value;
+    } else {
+      visitsEl.textContent = "–";
+    }
+  })
+  .catch(err => {
+    console.warn("Counter blocked or unavailable");
+    visitsEl.textContent = "–";
+  });
 });
 </script>
 
