@@ -22,14 +22,16 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ==========================
      MODAL LOGIC
   ========================== */
-  let modalData = { imgA: "", imgB: "", name: "", price: 0, desc: "", uv: false };
+  window.modalData = { imgA: "", imgB: "", name: "", price: 0, desc: "", uv: false };
 
   window.openModal = function(a,b,name,price,desc){
-    modalData = { imgA:a, imgB:b, name, price, desc, uv:false };
+    window.modalData = { imgA:a, imgB:b, name, price, desc, uv:false };
     const img = document.getElementById("modalImg");
     const descEl = document.getElementById("modalDesc");
+    const variantSelect = document.getElementById("modalVariant");
     if(img) img.src = a;
     if(descEl) descEl.innerText = desc;
+    if(variantSelect) variantSelect.value = "Classic";
     const modal = document.getElementById("modal");
     if(modal) modal.style.display = "flex";
   }
@@ -40,9 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.toggleUV = function(){
-    modalData.uv = !modalData.uv;
+    window.modalData.uv = !window.modalData.uv;
     const img = document.getElementById("modalImg");
-    if(img) img.src = modalData.uv ? modalData.imgB : modalData.imgA;
+    if(img) img.src = window.modalData.uv ? window.modalData.imgB : window.modalData.imgA;
   }
 
   /* ==========================
@@ -54,9 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addToCartFromModal = function(){
     const variant = document.getElementById("modalVariant")?.value || "Classic";
     let cart = getCart();
-    const existing = cart.find(i => i.name === modalData.name && i.variant===variant);
+    const existing = cart.find(i => i.name === window.modalData.name && i.variant===variant);
     if(existing){ existing.qty += 1; } else {
-      cart.push({ name: modalData.name, price: modalData.price, variant, qty:1 });
+      cart.push({ name: window.modalData.name, price: window.modalData.price, variant, qty:1 });
     }
     saveCart(cart);
     closeModal();
@@ -253,5 +255,10 @@ document.addEventListener("DOMContentLoaded", () => {
     w=canvas.width=window.innerWidth;
     h=canvas.height=window.innerHeight;
   });
+
+  /* ==========================
+     INIT CART ON LOAD
+  ========================== */
+  renderCart && renderCart();
 
 });
