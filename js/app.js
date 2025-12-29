@@ -1,15 +1,31 @@
-/* ==========================
-   VISITOR COUNTER
-========================== */
+<!-- ==========================
+     VISITOR COUNTER
+     LUMERIA NOIR
+========================== -->
+<span id="visits">0</span>
+
+<script>
 document.addEventListener("DOMContentLoaded", () => {
-  if (!localStorage.getItem("ln_visited")) {
-    let visits = Number(localStorage.getItem("ln_visits") || 0) + 1;
-    localStorage.setItem("ln_visits", visits);
-    localStorage.setItem("ln_visited", "true");
-  }
-  const v = document.getElementById("visits");
-  if (v) v.innerText = localStorage.getItem("ln_visits");
+  const counterKey = "lumeria-noir/visits";
+
+  fetch(`https://api.countapi.xyz/hit/${counterKey}`)
+    .then(response => response.json())
+    .then(data => {
+      const visitsEl = document.getElementById("visits");
+      if (visitsEl) {
+        visitsEl.innerText = data.value;
+      }
+    })
+    .catch(error => {
+      console.error("Visitor counter error:", error);
+      const visitsEl = document.getElementById("visits");
+      if (visitsEl) {
+        visitsEl.innerText = "–";
+      }
+    });
 });
+</script>
+
 
 /* ==========================
    UV EASTER EGG
