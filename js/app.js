@@ -1,4 +1,3 @@
-// JavaScript Document
 /* ==========================
    VISITOR COUNTER
 ========================== */
@@ -10,19 +9,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   const v = document.getElementById("visits");
   if (v) v.innerText = localStorage.getItem("ln_visits");
+
+  initLogoUV();
+  renderCart && renderCart();
+  initFadeInSections();
 });
 
 /* ==========================
-   UV EASTER EGG
+   UV LOGO EASTER EGG
 ========================== */
-document.addEventListener("DOMContentLoaded", () => {
+function initLogoUV() {
   const logo = document.querySelector(".logo");
-  if (logo) {
-    logo.addEventListener("click", () => {
+  if(logo){
+    logo.addEventListener("click", ()=>{
       document.body.classList.toggle("uv");
+      showToast(document.body.classList.contains("uv") ? "UV režim aktivovaný" : "UV režim vypnutý");
     });
   }
-});
+}
 
 /* ==========================
    MODAL LOGIC
@@ -38,19 +42,26 @@ let modalData = {
 
 function openModal(a, b, name, price, desc) {
   modalData = { imgA: a, imgB: b, name, price, desc, uv: false };
+  const modalEl = document.getElementById("modal");
+  const modalImg = document.getElementById("modalImg");
   document.getElementById("modalImg").src = a;
   document.getElementById("modalDesc").innerText = desc;
-  document.getElementById("modal").style.display = "flex";
+  modalEl.style.display = "flex";
+  modalEl.classList.add("show");
 }
 
 function closeModal() {
-  document.getElementById("modal").style.display = "none";
+  const modalEl = document.getElementById("modal");
+  modalEl.classList.remove("show");
+  setTimeout(()=> { modalEl.style.display = "none"; }, 300);
 }
 
 function toggleUV() {
   modalData.uv = !modalData.uv;
-  document.getElementById("modalImg").src =
-    modalData.uv ? modalData.imgB : modalData.imgA;
+  const modalImg = document.getElementById("modalImg");
+  modalImg.src = modalData.uv ? modalData.imgB : modalData.imgA;
+  modalImg.style.transform = "scale(0.97)";
+  setTimeout(()=> modalImg.style.transform="scale(1)", 150);
 }
 
 /* ==========================
@@ -64,6 +75,7 @@ function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+/* Add to cart with animation + toast */
 function addToCartFromModal() {
   const variant = document.getElementById("modalVariant").value;
   let cart = getCart();
@@ -86,6 +98,7 @@ function addToCartFromModal() {
   saveCart(cart);
   closeModal();
   renderCart && renderCart();
+  showToast("Produkt pridaný do košíka");
 }
 
 /* ==========================
@@ -128,6 +141,7 @@ function renderCart() {
   totalEl.innerText = total + " €";
 }
 
+/* Update cart helpers */
 function updateQty(i, val) {
   let cart = getCart();
   cart[i].qty = Math.max(1, Number(val));
@@ -166,7 +180,6 @@ if (conciergeForm) {
   conciergeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    // GDPR check
     const gdprCheckbox = document.getElementById("gdprOrder");
     if (!gdprCheckbox.checked) {
       document.getElementById("conciergeMessage").innerText =
@@ -181,7 +194,6 @@ if (conciergeForm) {
       return;
     }
 
-    // Vytvoriť HTML tabuľku pre email
     let cartHTML = `<table style="width:100%;border-collapse:collapse;">
       <thead>
         <tr>
@@ -211,15 +223,12 @@ if (conciergeForm) {
       </tfoot>
     </table>`;
 
-    // Pridať hidden inputy pre EmailJS
     const cartInput = document.createElement("input");
     cartInput.type = "hidden";
     cartInput.name = "cartHTML";
     cartInput.value = cartHTML;
-
     conciergeForm.appendChild(cartInput);
 
-    // Odoslať cez EmailJS
     emailjs.sendForm(
       "service_skuvlfb",
       "template_17jkem8",
@@ -230,6 +239,7 @@ if (conciergeForm) {
         "Objednávka bola diskrétne prijatá. Concierge vás bude kontaktovať.";
       conciergeForm.reset();
       renderCart();
+      showToast("Objednávka odoslaná!");
     }).catch(err => {
       document.getElementById("conciergeMessage").innerText =
         "Chyba pri odosielaní objednávky. Skúste znova.";
@@ -239,7 +249,7 @@ if (conciergeForm) {
 }
 
 /* ==========================
-   EMAILJS – CONTACT FORM (Vision)
+   EMAILJS – CONTACT FORM
 ========================== */
 const contactForm = document.getElementById("contactForm");
 if (contactForm) {
@@ -261,6 +271,7 @@ if (contactForm) {
       document.getElementById("contactMessage").innerText =
         "Správa bola prijatá. Ozveme sa diskrétne.";
       contactForm.reset();
+      showToast("Správa odoslaná!");
     }).catch(err => {
       document.getElementById("contactMessage").innerText =
         "Chyba pri odosielaní správy. Skúste znova.";
@@ -270,8 +281,33 @@ if (contactForm) {
 }
 
 /* ==========================
-   INIT CART ON LOAD
+   FADE-IN SECTIONS ON SCROLL
 ========================== */
-document.addEventListener("DOMContentLoaded", () => {
-  renderCart && renderCart();
-});
+function initFadeInSections() {
+  const fadeSections = document.querySelectorAll(".section");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    },
+    { threshold: 0.1 }
+  );
+  fadeSections.forEach(section => section.classList.add("fade-in-section"));
+  fadeSections.forEach(section => observer.observe(section));
+}
+
+/* ==========================
+   TOAST NOTIFICATIONS
+========================== */
+function showToast(message) {
+  let toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerText = message;
+  document.body.appendChild(toast);
+  setTimeout(()=> toast.classList.add("show"), 50);
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(()=> document.body.removeChild(toast), 400);
+  }, 2000);
+}
