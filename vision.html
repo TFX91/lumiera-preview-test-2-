@@ -1,60 +1,59 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vízia</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vizia – Lumièra Noir</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="galaxy"></div><div class="city"></div>
 
-<nav>
-  <div class="nav-inner">
-    <div class="logo">LUMIÈRA NOIR</div>
-    <div class="menu">
-      <a href="index.html">Domov</a>
-      <a href="collection.html">Kolekcia</a>
-      <a href="vision.html" class="active">Vízia</a>
-      <a href="about.html">O nás</a>
-      <a href="cart.html">Košík</a>
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">LUMIÈRA</div>
+      <div class="menu">
+        <a href="index.html">Index</a>
+        <a href="collection.html">Kolekcia</a>
+        <a href="vision.html" class="active">Vizia</a>
+        <a href="private-order.html">Vlastná objednávka</a>
+        <a href="about.html">O nás</a>
+        <a href="cart.html">Košík</a>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<section class="section">
-<h2>Vízia & Filozofia</h2>
-<p>Lumièra Noir predstavuje novú éru cukrárenského umenia. Miesto, kde sa spája estetika s chuťou, remeslo s emóciou a luxus s prirodzenosťou. Vytvárame zážitky, nie len dezerty. Priestor, kde sa kvalita stáva štandardom, každý detail má svoje miesto a zákazník odchádza s pocitom jedinečného okamihu, ktorý chce zažiť znova.</p>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div>
+      <h1>Naša vízia</h1>
+      <p>Posúvať hranice luxusu a digitálneho zážitku. Každý artefakt je kombináciou remeselného majstrovstva, moderného dizajnu a interaktívnej technológie.</p>
+    </div>
+  </section>
 
-<p>Sme prví na slovenskom trhu, ktorí prepájajú vysokú cukrárenskú gastronómiu s inovatívnym UV vizuálnym efektom. Naše produkty pod UV svetlom doslova ožívajú – farbou, hĺbkou aj atmosférou. Každý kúsok je vytvorený s precíznosťou a úctou k remeslu; starostlivo vyberané kvalitné suroviny, aktuálne trendy, vlastné receptúry a dôraz na harmóniu chutí sú základom nášho podpisu. Veríme, že pravý luxus spočíva v detailoch – v textúre, ktorá prekvapí, v chuti, ktorá doznieva, v momente, ktorý ostáva.</p>
+  <!-- VISION CONTENT -->
+  <section class="vision-section">
+    <h2>Budúcnosť Lumièra Noir</h2>
+    <p>Naša vízia je vytvoriť ekosystém, kde zákazník získava nielen produkt, ale kompletný zážitok. Limitované série, interaktívne prezentácie a AI personalizácia sú kľúčom k našej jedinečnosti.</p>
+    
+    <h2>Technológia a dizajn</h2>
+    <p>Každý artefakt využíva najnovšie technológie pre digitálne aj fyzické prepojenie. Transparentné materiály, 3D efekty, 360° zobrazenie a AI asistovaná personalizácia sú základom našej filozofie.</p>
+  </section>
 
-<p>Našou víziou je byť viac než cukráreň. Byť príbehom, ktorý sa stáva súčasťou vašich osláv. Svetlom, ktoré mení tradičnú cukrárenskú výrobu na zážitok budúcnosti.</p>
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Lumièra Noir</p>
+  </footer>
 
-<p>Lumièra Noir – keď sa dezert stáva zážitkom. Luxus vo svetle nových možností.</p>
-</section>
+  <script src="js/app.js"></script>
+  <script>
+    // Dynamické manifest hlásenie pre Vizia
+    document.addEventListener("DOMContentLoaded", ()=>{
+      if(window.artifactsState && !window.artifactsState.manifestShown){
+        showEphemeral("manifestVision", "Vízia Lumièra Noir: Luxus, ktorý si pamätáš navždy.");
+      }
+    });
+  </script>
 
-<section class="section">
-<h2>Kontaktujte nás</h2>
-<form id="contactForm">
-  <input name="firstName" placeholder="Meno">
-  <input name="lastName" placeholder="Priezvisko">
-  <input name="email" placeholder="Email">
-  <input name="phone" placeholder="Telefón">
-  <textarea name="message" placeholder="Správa"></textarea>
-
-  <!-- GDPR -->
-  <label style="display:block;font-size:12px;opacity:0.7;margin-top:10px;">
-    <input type="checkbox" id="gdprContact">
-    Súhlasím so spracovaním osobných údajov za účelom odpovede na správu.
-  </label>
-
-  <button type="submit">Odoslať</button>
-</form>
-<div id="contactMessage" style="opacity:0.7;margin-top:10px;"></div>
-
-<footer>Curated for a select audience · <span id="visits"></span></footer>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
-<script src="js/app.js"></script>
 </body>
 </html>
