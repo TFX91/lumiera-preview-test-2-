@@ -1,81 +1,199 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Košík</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Košík – Lumièra Noir</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="galaxy"></div><div class="city"></div>
 
-<nav>
-  <div class="nav-inner">
-    <div class="logo">LUMIÈRA NOIR</div>
-    <div class="menu">
-      <a href="index.html">Domov</a>
-      <a href="collection.html">Kolekcia</a>
-      <a href="vision.html">Vízia</a>
-      <a href="about.html">O nás</a>
-      <a href="cart.html" class="active">Košík</a>
+  <!-- BACKGROUNDS -->
+  <div class="galaxy"></div>
+  <div class="city"></div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-inner">
+      <div class="logo">LUMIÈRA NOIR</div>
+      <div class="menu">
+        <a href="index.html">Domov</a>
+        <a href="collection.html">Kolekcia</a>
+        <a href="vision.html">Vízia</a>
+        <a href="private-order.html">Vlastná objednávka</a>
+        <a href="about.html">O nás</a>
+        <a href="cart.html" class="active">Košík</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CART SECTION -->
+  <section class="section" style="padding:60px 8%;">
+    <h2>Váš výber</h2>
+
+    <table class="cart-table" id="cartTable">
+      <thead>
+        <tr>
+          <th>Názov</th>
+          <th>Variant</th>
+          <th>Množstvo</th>
+          <th>Cena</th>
+          <th>Odstrániť</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3"><strong>Spolu</strong></td>
+          <td colspan="2" id="cartTotal">0 €</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <button id="openCheckout" style="margin-top:24px;">Pokračovať k platbe</button>
+  </section>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal" id="checkoutModal">
+    <div class="close" onclick="closeCheckout()">✕</div>
+    <div class="modal-box" id="checkoutBox">
+      <h2>Objednávka</h2>
+      <div id="checkoutCartPreview"></div>
+
+      <!-- STEP 1: Kontaktné údaje -->
+      <div class="checkout-step step-1 active">
+        <h3>1. Kontaktné údaje</h3>
+        <input name="firstName" placeholder="Meno">
+        <input name="lastName" placeholder="Priezvisko">
+        <input name="email" placeholder="Email">
+        <input name="phone" placeholder="Telefón">
+        <button onclick="nextStep()">Ďalej</button>
+      </div>
+
+      <!-- STEP 2: Doručenie -->
+      <div class="checkout-step step-2">
+        <h3>2. Doručenie</h3>
+        <input name="street" placeholder="Ulica">
+        <input name="city" placeholder="Mesto">
+        <input name="zip" placeholder="PSČ">
+        <select name="delivery">
+          <option>Osobný odber</option>
+          <option>Rozvoz BA + TT (+10€)</option>
+        </select>
+        <button onclick="prevStep()">Späť</button>
+        <button onclick="nextStep()">Ďalej</button>
+      </div>
+
+      <!-- STEP 3: Potvrdenie -->
+      <div class="checkout-step step-3">
+        <h3>3. Potvrdenie objednávky</h3>
+        <label style="display:block;font-size:12px;opacity:0.7;margin-top:10px;">
+          <input type="checkbox" id="gdprCheckout"> Súhlasím so spracovaním osobných údajov
+        </label>
+        <button onclick="prevStep()">Späť</button>
+        <button onclick="submitCheckout()">Odoslať objednávku</button>
+        <div id="checkoutMessage" style="opacity:0.7;margin-top:10px;"></div>
+      </div>
     </div>
   </div>
-</nav>
 
-<section class="section">
-<h2>Váš výber</h2>
+  <footer>Curated for a select audience · <span id="visits"></span></footer>
 
-<table id="cartTable" style="width:100%;border-collapse:collapse;">
-  <thead>
-    <tr>
-      <th>Názov</th>
-      <th>Variant</th>
-      <th>Množstvo</th>
-      <th>Cena</th>
-      <th>Odstrániť</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-  <tfoot>
-    <tr>
-      <td colspan="3"><strong>Spolu</strong></td>
-      <td colspan="2" id="cartTotal"></td>
-    </tr>
-  </tfoot>
-</table>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // render cart
+      function renderCart() {
+        const tbody = document.querySelector("#cartTable tbody");
+        tbody.innerHTML = "";
+        const cart = window.getCart();
+        let total = 0;
+        cart.forEach((item, idx) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.variant}</td>
+            <td><input type="number" min="1" value="${item.qty}" data-index="${idx}" class="cartQty"></td>
+            <td>${(item.price*item.qty).toFixed(2)} €</td>
+            <td><button class="removeCart" data-index="${idx}">✕</button></td>
+          `;
+          tbody.appendChild(tr);
+          total += item.price*item.qty;
+        });
+        document.getElementById("cartTotal").innerText = total.toFixed(2) + " €";
 
-<h3>Concierge objednávka</h3>
+        // qty change
+        document.querySelectorAll(".cartQty").forEach(input=>{
+          input.addEventListener("change", e=>{
+            const index = e.target.dataset.index;
+            const val = parseInt(e.target.value) || 1;
+            const cart = window.getCart();
+            cart[index].qty = val;
+            window.saveCart(cart);
+            renderCart();
+          });
+        });
 
-<form id="conciergeForm">
-  <input name="firstName" placeholder="Meno">
-  <input name="lastName" placeholder="Priezvisko">
-  <input name="email" placeholder="Email">
-  <input name="phone" placeholder="Telefón">
-  <input name="street" placeholder="Ulica">
-  <input name="city" placeholder="Mesto">
-  <input name="zip" placeholder="PSČ">
+        // remove
+        document.querySelectorAll(".removeCart").forEach(btn=>{
+          btn.addEventListener("click", e=>{
+            const index = e.target.dataset.index;
+            let cart = window.getCart();
+            cart.splice(index,1);
+            window.saveCart(cart);
+            renderCart();
+          });
+        });
+      }
 
-  <select name="delivery">
-    <option>Osobný odber</option>
-    <option>Rozvoz BA + TT (+10€)</option>
-  </select>
+      renderCart();
 
-  <!-- GDPR -->
-  <label style="display:block;font-size:12px;opacity:0.7;margin:12px 0;">
-    <input type="checkbox" id="gdprOrder">
-    Súhlasím so spracovaním osobných údajov za účelom vybavenia objednávky.
-  </label>
+      // Open Checkout
+      document.getElementById("openCheckout").addEventListener("click",()=>{
+        document.getElementById("checkoutModal").style.display="flex";
+        const preview = document.getElementById("checkoutCartPreview");
+        const cart = window.getCart();
+        preview.innerHTML = cart.map(i=>`<p>${i.name} (${i.variant}) x${i.qty} = ${(i.price*i.qty).toFixed(2)} €</p>`).join("");
+      });
+    });
 
-  <button type="submit">Odoslať objednávku</button>
-</form>
+    function closeCheckout() {
+      document.getElementById("checkoutModal").style.display="none";
+    }
 
-<div id="conciergeMessage" style="opacity:0.7;margin-top:10px;"></div>
-</section>
+    let currentStep = 1;
+    function nextStep(){
+      document.querySelector(`.step-${currentStep}`).classList.remove("active");
+      currentStep++;
+      document.querySelector(`.step-${currentStep}`).classList.add("active");
+    }
+    function prevStep(){
+      document.querySelector(`.step-${currentStep}`).classList.remove("active");
+      currentStep--;
+      document.querySelector(`.step-${currentStep}`).classList.add("active");
+    }
 
-<footer>Curated for a select audience · <span id="visits"></span></footer>
+    function submitCheckout(){
+      if(!document.getElementById("gdprCheckout").checked){
+        alert("Musíte súhlasiť so spracovaním osobných údajov.");
+        return;
+      }
+      showEphemeral("checkout", "Objednávka bola odoslaná ✅");
+      window.saveCart([]);
+      renderCart();
+      closeCheckout();
+    }
 
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
-<script src="js/app.js"></script>
+    function showEphemeral(id, message){
+      const el = document.createElement("div");
+      el.className = "ephemeral";
+      el.innerText = message;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),1200);
+    }
+
+    function renderCart(){ /* placeholder, pre initial render */ }
+  </script>
+
 </body>
 </html>
