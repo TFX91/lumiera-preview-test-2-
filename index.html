@@ -3,44 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUMIÈRA NOIR</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<title>Lumièra Noir – Domov</title>
 <link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body>
-<div class="galaxy"></div><div class="city"></div>
+
+<div class="galaxy"></div>
+<div class="city"></div>
+
+<!-- NAVBAR -->
 <nav>
   <div class="nav-inner">
-    <div class="logo">LUMIÈRA NOIR</div>
+    <div class="logo">LUMIÈRA</div>
     <div class="menu">
       <a href="index.html" class="active">Domov</a>
       <a href="collection.html">Kolekcia</a>
       <a href="vision.html">Vízia</a>
+      <a href="private-order.html">Vlastná objednávka</a>
       <a href="about.html">O nás</a>
       <a href="cart.html">Košík</a>
     </div>
   </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div>
-    <h1>LUMIÈRA NOIR</h1>
-    
-    <p>Lumièra Noir – miesto, kde sa dezert stáva umením a každý okamih dostáva nový rozmer.  
-Naše dezerty vás zavedú do sveta, kde chuť, estetika a sofistikovanosť tvoria dokonalú harmóniu.</p>
-
-<p>V srdci našej tvorby je precíznosť a dôraz na každý detail.  
-Každý dezert je výsledkom spojenia starostlivo vyberaných kvalitných surovín a kreatívnej hry s farbou, textúrou a svetlom.  
-Pod UV svetlom sa naše produkty menia na malé zázraky, kde harmónia chutí a vizuálna dokonalosť vytvára okamihy, ktoré si budete chcieť uchovať navždy.</p>
-
-<p>Či už hľadáte elegantný darček, nezabudnuteľný dezert pre oslavu, alebo jednoducho chcete dopriať sebe či svojim blízkym luxusný moment, Lumièra Noir je tu pre vás. </p>
-
-<p>Objavte Lumièra Noir – miesto, kde každý dezert rozpráva svoj vlastný príbeh a kde luxus, elegancia a pôžitok sú prirodzenou súčasťou každého sústa.</p>
+    <h1>Vitajte v Lumièra Noir</h1>
+    <p>Objavte našu exkluzívnu kolekciu artefaktov a zažite nákup ako žiadny iný.</p>
+    <a href="collection.html"><button>Prejsť ku Kolekcii</button></a>
   </div>
 </section>
 
-<footer>Curated for a select audience · <span id="visits"></span></footer>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+<footer>
+  <p>© 2026 Lumièra Noir</p>
+  <p>Návštevy: <span id="visits">0</span></p>
+</footer>
+
 <script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+  if(window.artifactsState && !window.artifactsState.manifestShown){
+    showEphemeral("manifestIndex","Lumièra Noir – vstup do sveta luxusu, kde každý detail má váhu.");
+  }
+});
+</script>
 </body>
 </html>
