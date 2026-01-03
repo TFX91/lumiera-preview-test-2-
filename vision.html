@@ -1,59 +1,68 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vizia – Lumièra Noir</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vízia – Lumièra Noir</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav>
-    <div class="nav-inner">
-      <div class="logo">LUMIÈRA</div>
-      <div class="menu">
-        <a href="index.html">Index</a>
-        <a href="collection.html">Kolekcia</a>
-        <a href="vision.html" class="active">Vizia</a>
-        <a href="private-order.html">Vlastná objednávka</a>
-        <a href="about.html">O nás</a>
-        <a href="cart.html">Košík</a>
-      </div>
+<div class="galaxy"></div>
+<div class="city"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">LUMIÈRA</div>
+    <div class="menu">
+      <a href="index.html">Domov</a>
+      <a href="collection.html">Kolekcia</a>
+      <a href="vision.html" class="active">Vízia</a>
+      <a href="private-order.html">Vlastná objednávka</a>
+      <a href="about.html">O nás</a>
+      <a href="cart.html">Košík</a>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero">
-    <div>
-      <h1>Naša vízia</h1>
-      <p>Posúvať hranice luxusu a digitálneho zážitku. Každý artefakt je kombináciou remeselného majstrovstva, moderného dizajnu a interaktívnej technológie.</p>
-    </div>
-  </section>
+<!-- HERO SECTION -->
+<section class="hero">
+  <div>
+    <h1>Naša vízia</h1>
+    <p>Posúvať hranice luxusu a digitálneho zážitku. Každý artefakt je kombináciou remeselného majstrovstva, moderného dizajnu a interaktívnej technológie.</p>
+  </div>
+</section>
 
-  <!-- VISION CONTENT -->
-  <section class="vision-section">
-    <h2>Budúcnosť Lumièra Noir</h2>
-    <p>Naša vízia je vytvoriť ekosystém, kde zákazník získava nielen produkt, ale kompletný zážitok. Limitované série, interaktívne prezentácie a AI personalizácia sú kľúčom k našej jedinečnosti.</p>
-    
-    <h2>Technológia a dizajn</h2>
-    <p>Každý artefakt využíva najnovšie technológie pre digitálne aj fyzické prepojenie. Transparentné materiály, 3D efekty, 360° zobrazenie a AI asistovaná personalizácia sú základom našej filozofie.</p>
-  </section>
+<!-- VISION CONTENT -->
+<section class="section" style="padding:60px 8%;">
+  <h2>Budúcnosť Lumièra Noir</h2>
+  <p>Naša vízia je vytvoriť ekosystém, kde zákazník získava nielen produkt, ale kompletný zážitok. Limitované série, interaktívne prezentácie a AI personalizácia sú kľúčom k našej jedinečnosti.</p>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2026 Lumièra Noir</p>
-  </footer>
+  <h2>Technológia a dizajn</h2>
+  <p>Každý artefakt využíva najnovšie technológie pre digitálne aj fyzické prepojenie. Transparentné materiály, 3D efekty, 360° zobrazenie a AI asistovaná personalizácia sú základom našej filozofie.</p>
+</section>
 
-  <script src="js/app.js"></script>
-  <script>
-    // Dynamické manifest hlásenie pre Vizia
-    document.addEventListener("DOMContentLoaded", ()=>{
-      if(window.artifactsState && !window.artifactsState.manifestShown){
-        showEphemeral("manifestVision", "Vízia Lumièra Noir: Luxus, ktorý si pamätáš navždy.");
-      }
-    });
-  </script>
+<!-- FOOTER -->
+<footer style="padding:50px 0; text-align:center; font-size:.75rem; opacity:.6;">
+  © 2026 Lumièra Noir · <span id="visits"></span>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Ephemeral manifest pre vision.html
+  if(window.artifactsState && !window.artifactsState.manifestShown){
+    const manifestDiv = document.createElement("div");
+    manifestDiv.className = "ephemeral";
+    manifestDiv.innerText = "Vízia Lumièra Noir: Luxus, ktorý si pamätáš navždy.";
+    document.body.appendChild(manifestDiv);
+    window.artifactsState.manifestShown = true;
+    setTimeout(()=>manifestDiv.remove(), 4000);
+  }
+});
+</script>
 
 </body>
 </html>
