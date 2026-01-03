@@ -7,7 +7,7 @@
   --gold:#c9b46d;
   --text:#f2f2f2;
   --glass:rgba(255,255,255,.04);
-  --shadow:rgba(179,107,255,.2); /* znížená intenzita */
+  --shadow:rgba(179,107,255,.2);
   --particle-color:rgba(179,107,255,0.25);
 }
 
@@ -17,10 +17,6 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:linear-gradient(to bottom,#1b0033,var(--bg));color:var(--text);overflow-x:hidden;transition:background .6s,color .6s,opacity .6s;scroll-behavior:smooth;}
 body.uv{background:#020004;color:#fff;}
-
-/* ==========================
-   TYPOGRAPHY
-========================== */
 h1,h2,h3{font-family:'Playfair Display',serif;letter-spacing:.35em;}
 p{line-height:1.6;margin-bottom:1em;}
 a{text-decoration:none;color:var(--gold);transition:.3s;}
@@ -32,6 +28,7 @@ a:hover,a.active{color:var(--uv);text-shadow:0 0 12px var(--uv);}
 nav{position:fixed;top:0;width:100%;z-index:100;backdrop-filter:blur(14px);background:rgba(0,0,0,.45);border-bottom:1px solid rgba(201,180,109,.3);}
 .nav-inner{display:flex;justify-content:space-between;align-items:center;padding:20px 8%;}
 .logo{color:var(--gold);letter-spacing:.4em;font-weight:bold;cursor:pointer;transition:transform .6s,text-shadow .6s;}
+nav .menu a{margin-left:24px;font-weight:500;}
 
 /* ==========================
    HERO
@@ -44,18 +41,17 @@ nav{position:fixed;top:0;width:100%;z-index:100;backdrop-filter:blur(14px);backg
 /* ==========================
    GRID PRODUCTS
 ========================== */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:48px;margin-top:40px;padding:0 0 40px 0;}
-.product{background:var(--glass);border:1px solid rgba(201,180,109,.2);border-radius:26px;padding:20px;text-align:center;cursor:pointer;transition:.5s cubic-bezier(.25,.8,.25,1);overflow:hidden;position:relative;will-change:transform,box-shadow,opacity;}
+.grid, #wishlistGrid, #privateOrderGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:48px;margin-top:40px;padding:0 0 40px 0;}
+.product{background:var(--glass);border:1px solid rgba(201,180,109,.2);border-radius:26px;padding:20px;text-align:center;cursor:pointer;transition:.5s cubic-bezier(.25,.8,.25,1);overflow:hidden;position:relative;}
 .product img{width:100%;border-radius:18px;transition:.4s ease;}
-.product:hover{transform:translateY(-4px);box-shadow:0 0 18px var(--uv);} /* znížené */
+.product:hover{transform:translateY(-4px);box-shadow:0 0 18px var(--uv);}
 .product::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center, rgba(179,107,255,0.1) 0%, transparent 80%);opacity:0;transition:.6s ease;}
 .product:hover::after{opacity:1;}
-
-/* PRODUCT HOVER 3D */
-.product{transition:transform .5s cubic-bezier(.25,.8,.25,1),box-shadow .5s ease,opacity .6s ease;}
+.product h4, .product p{transition: transform 0.3s ease, text-shadow 0.3s ease;}
+.product:hover h4, .product:hover p{transform:translateY(-2px);text-shadow:0 0 6px var(--uv);}
 
 /* ==========================
-   MODAL
+   MODALS
 ========================== */
 .modal, #detailModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background: rgba(0,0,0,0.94);z-index:200;animation:fadeIn .6s;}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -68,72 +64,57 @@ nav{position:fixed;top:0;width:100%;z-index:100;backdrop-filter:blur(14px);backg
    BUTTONS
 ========================== */
 button{margin-top:18px;background:none;border:1px solid var(--gold);color:var(--gold);padding:12px 36px;border-radius:40px;cursor:pointer;letter-spacing:2px;transition:.4s ease;}
-button:hover{background:var(--gold);color:#000;box-shadow:0 0 12px var(--uv);} /* znížené */
-
-/* UV & Wishlist Buttons */
+button:hover{background:var(--gold);color:#000;box-shadow:0 0 12px var(--uv);}
 #modalUVBtn,#modalWishlistBtn,#detailAddCartBtn,#detailRemoveWishlistBtn{
   margin-top:12px;padding:10px 28px;border-radius:28px;border:1px solid var(--uv);cursor:pointer;color:var(--uv);background:transparent;transition:.3s;display:flex;align-items:center;justify-content:center;
 }
 #modalUVBtn:hover,#modalWishlistBtn:hover,#detailAddCartBtn:hover,#detailRemoveWishlistBtn:hover{background: var(--uv); color:#000; box-shadow:0 0 12px var(--uv);}
 #modalUVBtn::before,#modalWishlistBtn::before,#detailAddCartBtn::before,#detailRemoveWishlistBtn::before{content:"??";margin-right:8px;}
 
-/* INPUTS & SELECTS */
+/* INPUTS */
 input,select{width:100%;background:transparent;border:1px solid rgba(201,180,109,.4);color: var(--text);padding:12px;margin:12px 0;border-radius:12px;transition:border .3s ease;font-size:0.95rem;}
 input:focus,select:focus{border-color:var(--uv);outline:none;}
 input[type="checkbox"]{margin-right:12px;accent-color: var(--uv);cursor:pointer;}
 
 /* ==========================
-   EPHEMERAL & ADD TO CART ANIMATION
+   EPHEMERAL NOTIFICATIONS
 ========================== */
-.add-to-cart-anim,.ephemeral{
-  position:fixed;left:50%;transform:translateX(-50%) translateY(10px);
-  background: rgba(179,107,255,0.18);padding:12px 24px;border-radius:16px;color: var(--text);font-weight:600;opacity:0;z-index:300;animation:fadeInEphemeral .6s forwards;transition:transform 1.2s ease,opacity 1.2s ease;
-}
-.add-to-cart-anim{bottom:10%;font-weight:600;}
+.add-to-cart-anim,.ephemeral{position:fixed;left:50%;transform:translateX(-50%) translateY(10px);background: rgba(179,107,255,0.18);padding:12px 24px;border-radius:16px;color: var(--text);font-weight:600;opacity:0;z-index:300;animation:fadeInEphemeral .6s forwards;transition:transform 1.2s ease,opacity 1.2s ease;}
+.add-to-cart-anim{bottom:10%;}
 .ephemeral{bottom:20px;font-weight:500;}
 @keyframes fadeInEphemeral{from{opacity:0;transform:translateX(-50%) translateY(10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 
-/* ==========================
-   QUIET EXIT
-========================== */
-.quiet-exit{position:fixed;top:20%;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(179,107,255,0.18);padding:16px 32px;border-radius:20px;color:var(--text);font-weight:600;font-size:1rem;z-index:500;pointer-events:none;box-shadow:0 0 16px var(--uv);} /* znížené */
+/* QUIET EXIT */
+.quiet-exit{position:fixed;top:20%;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(179,107,255,0.18);padding:16px 32px;border-radius:20px;color:var(--text);font-weight:600;font-size:1rem;z-index:500;pointer-events:none;box-shadow:0 0 16px var(--uv);}
 
-/* ==========================
-   WISHLIST GRID
-========================== */
+/* WISHLIST SECTION */
 .wishlist-section{padding: 40px 8%;background: rgba(255,255,255,0.02);}
 .wishlist-section h2{font-family: 'Playfair Display', serif;color: var(--uv);text-shadow: 0 0 12px var(--uv);margin-bottom: 24px;text-align: center;}
 #wishlistGrid{display:grid;grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));gap: 48px;justify-content: start;}
-.wishlist-section .product{max-width: 260px;margin: 0 auto;cursor: pointer;}
 
 /* DETAIL MODAL */
-#detailModal .modal-box{max-width: 900px;width: 95%;padding: 48px;background: rgba(255,255,255,0.06);border-radius:32px;backdrop-filter: blur(22px);box-shadow:0 0 40px rgba(0,0,0,.7);} /* znížené */
+#detailModal .modal-box{max-width: 900px;width: 95%;padding: 48px;background: rgba(255,255,255,0.06);border-radius:32px;backdrop-filter: blur(22px);box-shadow:0 0 40px rgba(0,0,0,.7);}
 #detailModal .modal-box img{max-height:70vh;border-radius:28px;}
 #detailModal .modal-buttons{display:flex;gap:20px;justify-content:center;margin-top:20px;}
 #detailModal .modal-buttons button{flex:1;}
 
-/* CANVAS PARTICLES + BACKGROUNDS */
+/* CANVAS + BACKGROUNDS */
 canvas{position: fixed;top:0;left:0;z-index:-3;pointer-events:none;}
 .galaxy{position: fixed;inset:0;background:url('https://raw.githubusercontent.com/JulianLaval/canvas-particle-network/master/img/demo-bg.jpg') center/cover no-repeat;opacity: .12; z-index:-2;}
 .city{position: fixed;bottom:0;width:100%;height:220px;background:url('https://i.ibb.co/ZYW3VTp/cityscape.png') bottom center/cover no-repeat;opacity:.10;z-index:-1;}
 
+/* FOOTER */
+footer{text-align:center;padding:50px 0;font-size:.75rem;opacity:.6;}
+
 /* RESPONSIVE */
-@media (max-width:1024px){.grid{gap:32px;}.wishlist-section#wishlistGrid{gap:32px;}}
+@media (max-width:1024px){.grid,#wishlistGrid{gap:32px;}}
 @media (max-width:768px){.grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;}}
-@media (max-width:480px){.grid{grid-template-columns:1fr;gap:20px;}.wishlist-section#wishlistGrid{grid-template-columns:1fr;gap:20px;}}
+@media (max-width:480px){.grid,#wishlistGrid{grid-template-columns:1fr;gap:20px;}}
 
 /* ==========================
-   DYNAMIC UV & SECRET VARIANT
+   UV & SPECIAL VARIANTS
 ========================== */
-body.uv .product{border-color: var(--uv); box-shadow: 0 0 18px var(--uv);} /* znížené */
+body.uv .product{border-color: var(--uv); box-shadow: 0 0 18px var(--uv);}
 #modalVariant option:last-child{color:var(--uv);font-weight:700;text-shadow:0 0 10px var(--uv);}
 .product[style*="opacity:0.7"]{filter:grayscale(20%);}
-
-/* ==========================
-   SUBTLE PARALLAX & SCROLL
-========================== */
 body{background-attachment:fixed;background-size:cover;}
-
-/* PRODUCT HOVER MICRO-MOTION */
-.product h4, .product p {transition: transform 0.3s ease, text-shadow 0.3s ease;}
-.product:hover h4, .product:hover p {transform: translateY(-2px);text-shadow:0 0 6px var(--uv);}
