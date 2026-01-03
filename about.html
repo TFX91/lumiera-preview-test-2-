@@ -1,62 +1,88 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>O nás – Lumièra Noir</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O nás – Lumièra Noir</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav>
-    <div class="nav-inner">
-      <div class="logo">LUMIÈRA</div>
-      <div class="menu">
-        <a href="index.html">Index</a>
-        <a href="collection.html">Kolekcia</a>
-        <a href="vision.html">Vizia</a>
-        <a href="private-order.html">Vlastná objednávka</a>
-        <a href="about.html" class="active">O nás</a>
-        <a href="cart.html">Košík</a>
+<div class="galaxy"></div>
+<div class="city"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">LUMIÈRA</div>
+    <div class="menu">
+      <a href="index.html">Domov</a>
+      <a href="collection.html">Kolekcia</a>
+      <a href="vision.html">Vízia</a>
+      <a href="private-order.html">Vlastná objednávka</a>
+      <a href="about.html" class="active">O nás</a>
+      <a href="cart.html">Košík</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section" style="padding:60px 8%;">
+  <h1>O Lumièra Noir</h1>
+  <p>Lumièra Noir je exkluzívny koncept luxusných artefaktov a zážitkového nakupovania. Každý produkt je starostlivo vybraný a navrhnutý tak, aby odrážal eleganciu, precíznosť a umeleckú hodnotu.</p>
+
+  <div class="about-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:40px; margin-top:40px;">
+    <div class="about-card">
+      <img src="https://picsum.photos/seed/lux1/400/300" alt="Luxusná kvalita" style="width:100%; border-radius:20px;">
+      <h3>Kvalita a precíznosť</h3>
+      <p>Každý artefakt je ručne kontrolovaný a navrhnutý s maximálnou starostlivosťou.</p>
+    </div>
+    <div class="about-card">
+      <img src="https://picsum.photos/seed/lux2/400/300" alt="Exkluzivita" style="width:100%; border-radius:20px;">
+      <h3>Exkluzivita</h3>
+      <p>Naša kolekcia je limitovaná a dostupná len pre vybraných klientov, čím zachováva jedinečnosť.</p>
+    </div>
+    <div class="about-card">
+      <img src="https://picsum.photos/seed/lux3/400/300" alt="Zákaznícky servis" style="width:100%; border-radius:20px;">
+      <h3>Prémiový servis</h3>
+      <p>Poskytujeme osobný prístup a kompletnú podporu, aby bol každý nákup nezabudnuteľný.</p>
+    </div>
+  </div>
+
+  <div class="founders" style="margin-top:60px;">
+    <h2>Naši zakladatelia</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:40px; margin-top:30px;">
+      <div style="text-align:center;">
+        <img src="https://picsum.photos/seed/founder1/200/200" alt="Zakladateľ 1" style="border-radius:50%; width:120px; height:120px;">
+        <h4>Julian Laval</h4>
+        <p>Zakladateľ & Kreatívny riaditeľ</p>
+      </div>
+      <div style="text-align:center;">
+        <img src="https://picsum.photos/seed/founder2/200/200" alt="Zakladateľ 2" style="border-radius:50%; width:120px; height:120px;">
+        <h4>Camille Noir</h4>
+        <p>Zakladateľ & Kurátor kolekcie</p>
       </div>
     </div>
-  </nav>
+  </div>
+</section>
 
-  <!-- HERO SECTION -->
-  <section class="hero">
-    <div>
-      <h1>O nás</h1>
-      <p>Lumièra Noir je exkluzívny koncept, ktorý spája luxus, umenie a technológiu. Každý artefakt je starostlivo vybraný a navrhnutý, aby priniesol nezabudnuteľný zážitok.</p>
-    </div>
-  </section>
+<footer style="padding:50px 0; text-align:center; font-size:.75rem; opacity:.6;">
+  Curated for a select audience · <span id="visits"></span>
+</footer>
 
-  <!-- ABOUT CONTENT -->
-  <section class="about-section">
-    <h2>Naša vízia</h2>
-    <p>Chceme vytvoriť jedinečný svet, kde každý zákazník cíti exkluzivitu a prémiový prístup. Naše produkty sú limitované, každý kus má svoj príbeh.</p>
-    
-    <h2>Náš tím</h2>
-    <p>Za Lumièra Noir stojí tím kreatívcov, dizajnérov a technologických nadšencov, ktorí spoločne posúvajú hranice digitálneho a fyzického luxusu.</p>
-
-    <h2>Počet návštev</h2>
-    <p>Počet návštev stránky: <span id="visits">0</span></p>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2026 Lumièra Noir</p>
-  </footer>
-
-  <script src="js/app.js"></script>
-  <script>
-    // Dynamické manifest hlásenie pre About
-    document.addEventListener("DOMContentLoaded", ()=>{
-      if(window.artifactsState && !window.artifactsState.manifestShown){
-        showEphemeral("manifestAbout", "Vitajte vo svete Lumièra Noir – každý detail je jedinečný.");
-      }
-    });
-  </script>
+<script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if(window.artifactsState && !window.artifactsState.manifestShown){
+    const manifestDiv = document.createElement("div");
+    manifestDiv.className = "ephemeral";
+    manifestDiv.innerText = "Lumièra Noir – O nás: Každý detail je významný.";
+    document.body.appendChild(manifestDiv);
+    window.artifactsState.manifestShown = true;
+    setTimeout(()=>manifestDiv.remove(), 4000);
+  }
+});
+</script>
 
 </body>
 </html>
