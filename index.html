@@ -4,15 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lumièra Noir – Domov</title>
-<link rel="stylesheet" href="css/style.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <div class="galaxy"></div>
 <div class="city"></div>
 
-<!-- NAVBAR -->
 <nav>
   <div class="nav-inner">
     <div class="logo">LUMIÈRA</div>
@@ -27,7 +26,7 @@
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO SECTION -->
 <section class="hero">
   <div>
     <h1>Vitajte v Lumièra Noir</h1>
@@ -36,18 +35,101 @@
   </div>
 </section>
 
+<!-- ABOUT / O NÁS -->
+<section class="section" style="padding:60px 8%; background:rgba(255,255,255,.02);">
+  <h2>O nás</h2>
+  <div style="max-width:900px; margin:0 auto; text-align:center;">
+    <p>V Lumièra Noir spájame luxus, dizajn a exkluzivitu. Každý artefakt je starostlivo vybraný a pripravený pre tých, ktorí chcú viac než obyčajný zážitok.</p>
+    <p>Naša vízia je priniesť zákazníkovi pocit výnimočnosti a prepojiť tradičné remeslo s moderným luxusom. Objednávky sú starostlivo pripravené a balené s maximálnou precíznosťou.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  <p>© 2026 Lumièra Noir</p>
-  <p>Návštevy: <span id="visits">0</span></p>
+  © 2026 Lumièra Noir · Návštevy: <span id="visits">0</span>
 </footer>
 
 <script src="js/app.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", () => {
   if(window.artifactsState && !window.artifactsState.manifestShown){
-    showEphemeral("manifestIndex","Lumièra Noir – vstup do sveta luxusu, kde každý detail má váhu.");
+    const manifestDiv = document.createElement("div");
+    manifestDiv.className = "ephemeral";
+    manifestDiv.innerText = "Lumièra Noir – vstup do sveta luxusu, kde každý detail má váhu.";
+    document.body.appendChild(manifestDiv);
+    window.artifactsState.manifestShown = true;
+    setTimeout(()=>manifestDiv.remove(), 4000);
   }
 });
 </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumièra Noir – Domov</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="galaxy"></div>
+<div class="city"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">LUMIÈRA</div>
+    <div class="menu">
+      <a href="index.html" class="active">Domov</a>
+      <a href="collection.html">Kolekcia</a>
+      <a href="vision.html">Vízia</a>
+      <a href="private-order.html">Vlastná objednávka</a>
+      <a href="about.html">O nás</a>
+      <a href="cart.html">Košík</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+  <div>
+    <h1>Vitajte v Lumièra Noir</h1>
+    <p>Objavte našu exkluzívnu kolekciu artefaktov a zažite nákup ako žiadny iný.</p>
+    <a href="collection.html"><button>Prejsť ku Kolekcii</button></a>
+  </div>
+</section>
+
+<!-- ABOUT / O NÁS -->
+<section class="section" style="padding:60px 8%; background:rgba(255,255,255,.02);">
+  <h2>O nás</h2>
+  <div style="max-width:900px; margin:0 auto; text-align:center;">
+    <p>V Lumièra Noir spájame luxus, dizajn a exkluzivitu. Každý artefakt je starostlivo vybraný a pripravený pre tých, ktorí chcú viac než obyčajný zážitok.</p>
+    <p>Naša vízia je priniesť zákazníkovi pocit výnimočnosti a prepojiť tradičné remeslo s moderným luxusom. Objednávky sú starostlivo pripravené a balené s maximálnou precíznosťou.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 Lumièra Noir · Návštevy: <span id="visits">0</span>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Ephemeral manifest pre index
+  if(window.artifactsState && !window.artifactsState.manifestShown){
+    const manifestDiv = document.createElement("div");
+    manifestDiv.className = "ephemeral";
+    manifestDiv.innerText = "Lumièra Noir – vstup do sveta luxusu, kde každý detail má váhu.";
+    document.body.appendChild(manifestDiv);
+    window.artifactsState.manifestShown = true;
+    setTimeout(()=>manifestDiv.remove(), 4000);
+  }
+});
+</script>
+
 </body>
 </html>
