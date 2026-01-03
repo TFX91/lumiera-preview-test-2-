@@ -1,113 +1,179 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vlastná objednávka – Lumièra Noir</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privátna Objednávka – Lumièra Noir</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- BACKGROUNDS -->
-  <div class="galaxy"></div>
-  <div class="city"></div>
+<div class="galaxy"></div>
+<div class="city"></div>
 
-  <!-- NAVBAR -->
-  <nav>
-    <div class="nav-inner">
-      <div class="logo">LUMIÈRA NOIR</div>
-      <div class="menu">
-        <a href="index.html">Domov</a>
-        <a href="collection.html">Kolekcia</a>
-        <a href="vision.html">Vízia</a>
-        <a href="private-order.html" class="active">Vlastná objednávka</a>
-        <a href="about.html">O nás</a>
-        <a href="cart.html">Košík</a>
-      </div>
+<nav>
+  <div class="nav-inner">
+    <div class="logo">LUMIÈRA NOIR</div>
+    <div class="menu">
+      <a href="index.html">Domov</a>
+      <a href="collection.html">Kolekcia</a>
+      <a href="vision.html">Vízia</a>
+      <a href="private-order.html" class="active">Privátna objednávka</a>
+      <a href="about.html">O nás</a>
+      <a href="cart.html">Košík</a>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- PRIVATE ORDER SECTION -->
-  <section class="section" style="padding:60px 8%;">
-    <h2>Vytvorte svoj artefakt</h2>
+<section class="section">
+<h2>Privátna objednávka</h2>
 
-    <div class="private-order-grid" style="display:flex; gap:24px; flex-wrap:wrap;">
-      <!-- ORDER FORM -->
-      <div class="order-form" style="flex:1; min-width:300px; background:var(--glass); padding:24px; border-radius:28px;">
-        <h3>Parametre produktu</h3>
-        <label>Variant:</label>
-        <select id="orderVariant">
-          <option>Classic</option>
-          <option>Limited</option>
-          <option>Lacto-free</option>
-          <option>Bezlepkove</option>
-        </select>
+<div class="private-order-container" style="display:flex; gap:40px; flex-wrap:wrap; justify-content:center;">
 
-        <label>Meno artefaktu:</label>
-        <input type="text" id="orderName" placeholder="Napíšte názov">
+  <!-- Ľavý panel: výber produktov -->
+  <div id="privateOrderGrid" style="flex:1 1 320px; display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px;"></div>
 
-        <label>Popis / špecifikácie:</label>
-        <textarea id="orderDesc" placeholder="Popíšte požadované detaily" style="width:100%; padding:12px; border-radius:12px; margin:12px 0;"></textarea>
-
-        <button id="sendInquiryBtn">Odoslať dopyt</button>
-      </div>
-
-      <!-- ORDER SUMMARY -->
-      <div class="order-summary" style="flex:1; min-width:300px; background:var(--glass); padding:24px; border-radius:28px;">
-        <h3>Vaša objednávka</h3>
-        <p><strong>Variant:</strong> <span id="summaryVariant">Classic</span></p>
-        <p><strong>Názov:</strong> <span id="summaryName">---</span></p>
-        <p><strong>Popis:</strong> <span id="summaryDesc">---</span></p>
-      </div>
+  <!-- Stredný panel: preview produktu -->
+  <div style="flex:1 1 360px; background:rgba(255,255,255,0.05); border-radius:24px; padding:24px; text-align:center;">
+    <img id="previewImg" src="" alt="Preview" style="width:100%; border-radius:20px; margin-bottom:16px;">
+    <h3 id="previewName">Vyberte produkt</h3>
+    <p id="previewVariant">Variant:</p>
+    <p id="previewQty">Počet:</p>
+    <p id="previewPrice">Cena:</p>
+    <div style="margin-top:12px;">
+      <label>Variant:
+        <select id="previewVariantSelect"></select>
+      </label>
+      <label>Množstvo:
+        <input type="number" id="previewQtyInput" value="1" min="1" style="width:60px;">
+      </label>
     </div>
-  </section>
+    <button id="addToPrivateCart" style="margin-top:16px;">Pridať do dopytu</button>
+  </div>
 
-  <footer>Curated for a select audience · <span id="visits"></span></footer>
+  <!-- Pravý panel: kontaktný formulár -->
+  <div style="flex:1 1 360px; background:rgba(255,255,255,0.05); border-radius:24px; padding:24px;">
+    <h3>Kontaktné údaje</h3>
+    <input type="text" name="firstName" placeholder="Meno" required>
+    <input type="text" name="lastName" placeholder="Priezvisko" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="tel" name="phone" placeholder="Telefón" required>
+    <input type="text" name="street" placeholder="Ulica" required>
+    <input type="text" name="city" placeholder="Mesto" required>
+    <input type="text" name="zip" placeholder="PSČ" required>
+    <select name="contactReason">
+      <option>Otázka o produkte</option>
+      <option>Individuálna objednávka</option>
+      <option>Iné</option>
+    </select>
+    <label style="display:block;font-size:12px;opacity:0.7;margin-top:10px;">
+      <input type="checkbox" id="gdprPrivate"> Súhlasím so spracovaním osobných údajov
+    </label>
+    <textarea id="privateNotes" placeholder="Zadajte Vaše požiadavky" style="width:100%;min-height:80px;margin-top:10px;border-radius:12px;padding:10px;border:1px solid rgba(201,180,109,.4);background:transparent;color:var(--text);"></textarea>
+    <button id="sendPrivateOrder" style="margin-top:12px;">Odoslať dopyt</button>
+    <div id="privateOrderMessage" style="opacity:0.8; margin-top:10px;"></div>
+  </div>
 
-  <script src="js/app.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const variantSelect = document.getElementById("orderVariant");
-      const nameInput = document.getElementById("orderName");
-      const descInput = document.getElementById("orderDesc");
+</div>
 
-      const summaryVariant = document.getElementById("summaryVariant");
-      const summaryName = document.getElementById("summaryName");
-      const summaryDesc = document.getElementById("summaryDesc");
+<footer>Curated for a select audience · <span id="visits"></span></footer>
 
-      // update summary in real-time
-      function updateSummary() {
-        summaryVariant.innerText = variantSelect.value;
-        summaryName.innerText = nameInput.value || "---";
-        summaryDesc.innerText = descInput.value || "---";
-      }
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
-      variantSelect.addEventListener("change", updateSummary);
-      nameInput.addEventListener("input", updateSummary);
-      descInput.addEventListener("input", updateSummary);
+  const grid = document.getElementById("privateOrderGrid");
+  const previewImg = document.getElementById("previewImg");
+  const previewName = document.getElementById("previewName");
+  const previewVariant = document.getElementById("previewVariant");
+  const previewQty = document.getElementById("previewQty");
+  const previewPrice = document.getElementById("previewPrice");
+  const previewVariantSelect = document.getElementById("previewVariantSelect");
+  const previewQtyInput = document.getElementById("previewQtyInput");
+  const addToPrivateCartBtn = document.getElementById("addToPrivateCart");
+  const sendPrivateOrderBtn = document.getElementById("sendPrivateOrder");
+  const gdprCheckbox = document.getElementById("gdprPrivate");
+  const messageBox = document.getElementById("privateOrderMessage");
 
-      // send inquiry
-      document.getElementById("sendInquiryBtn").addEventListener("click", () => {
-        if(!nameInput.value || !descInput.value) {
-          alert("Vyplňte názov a popis artefaktu.");
-          return;
-        }
-        showEphemeral("inquiry", `Dopyt pre artefakt "${nameInput.value}" bol odoslaný ✅`);
-        nameInput.value = "";
-        descInput.value = "";
-        variantSelect.value = "Classic";
-        updateSummary();
-      });
+  // Render produkty do gridu
+  window.collection.forEach(prod => {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <img src="${prod.imgA}" alt="${prod.name}">
+      <h4>${prod.name}</h4>
+      <p>${prod.price} €</p>
+    `;
+    div.addEventListener("click", () => {
+      previewImg.src = prod.imgA;
+      previewName.innerText = prod.name;
+      previewVariantSelect.innerHTML = prod.variant.map(v => `<option>${v}</option>`).join("");
+      previewQtyInput.value = 1;
+      previewVariant.innerText = `Variant: ${prod.variant[0]}`;
+      previewQty.innerText = `Počet: 1`;
+      previewPrice.innerText = `Cena: ${prod.price} €`;
+      window.selectedPrivateProduct = { ...prod, qty:1, selectedVariant: prod.variant[0] };
     });
+    grid.appendChild(div);
+  });
 
-    function showEphemeral(id, message){
-      const el = document.createElement("div");
-      el.className = "ephemeral";
-      el.innerText = message;
-      document.body.appendChild(el);
-      setTimeout(()=>el.remove(),1200);
-    }
-  </script>
+  // Update preview variant a qty
+  previewVariantSelect.addEventListener("change", () => {
+    if(!window.selectedPrivateProduct) return;
+    window.selectedPrivateProduct.selectedVariant = previewVariantSelect.value;
+    previewVariant.innerText = `Variant: ${previewVariantSelect.value}`;
+  });
+  previewQtyInput.addEventListener("input", () => {
+    if(!window.selectedPrivateProduct) return;
+    const qty = parseInt(previewQtyInput.value) || 1;
+    window.selectedPrivateProduct.qty = qty;
+    previewQty.innerText = `Počet: ${qty}`;
+    previewPrice.innerText = `Cena: ${window.selectedPrivateProduct.price * qty} €`;
+  });
+
+  // Pridať do privátneho dopytu
+  addToPrivateCartBtn.addEventListener("click", () => {
+    if(!window.selectedPrivateProduct) return alert("Vyberte produkt!");
+    if(!window.privateCart) window.privateCart = [];
+    window.privateCart.push({...window.selectedPrivateProduct});
+    messageBox.innerText = `${window.selectedPrivateProduct.name} pridaný do dopytu!`;
+  });
+
+  // Odoslanie cez EmailJS
+  sendPrivateOrderBtn.addEventListener("click", () => {
+    if(!gdprCheckbox.checked){ alert("Súhlas s GDPR je povinný."); return; }
+    if(!window.privateCart || window.privateCart.length===0){ alert("Žiadny produkt v dopyte!"); return; }
+
+    const firstName = document.querySelector("input[name='firstName']").value;
+    const lastName = document.querySelector("input[name='lastName']").value;
+    const email = document.querySelector("input[name='email']").value;
+    const phone = document.querySelector("input[name='phone']").value;
+    const street = document.querySelector("input[name='street']").value;
+    const city = document.querySelector("input[name='city']").value;
+    const zip = document.querySelector("input[name='zip']").value;
+    const contactReason = document.querySelector("select[name='contactReason']").value;
+    const notes = document.getElementById("privateNotes").value;
+
+    const orderDetails = window.privateCart.map(p => `${p.name} | ${p.selectedVariant} | ${p.qty} ks | ${p.price * p.qty} €`).join("\n");
+
+    const templateParams = {
+      firstName, lastName, email, phone, street, city, zip, contactReason, notes, orderDetails
+    };
+
+    emailjs.send("service_skuvlfb","template_xiqb34i",templateParams,"uBmaCJ5QxxC0LOY1W")
+      .then(res=>{ 
+        messageBox.innerText="Dopyt úspešne odoslaný!"; 
+        window.privateCart=[]; 
+      })
+      .catch(err=>{ 
+        messageBox.innerText="Chyba pri odosielaní. Skúste znova."; 
+      });
+  });
+
+});
+</script>
 
 </body>
 </html>
